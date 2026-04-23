@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Icon from '@/components/ui/icon'
+
+const SEND_URL = 'https://functions.poehali.dev/f89ef799-3a54-43fb-acc7-b79212ae22fa'
 
 const NAV_LINKS = [
   { label: 'Услуги', href: '#services' },
@@ -55,8 +57,8 @@ function Navbar() {
             <Icon name="Zap" size={16} className="text-white" />
           </div>
           <div>
-            <span className="font-bold text-slate-900 text-lg leading-none">ЭлектроПроект</span>
-            <p className="text-xs text-slate-500 leading-none mt-0.5">Промышленное проектирование</p>
+            <span className="font-bold text-slate-900 text-lg leading-none">ЭТМПРО</span>
+            <p className="text-xs text-slate-500 leading-none mt-0.5">Электротехническое моделирование и проектирование</p>
           </div>
         </div>
         <nav className="hidden md:flex items-center gap-8">
@@ -108,13 +110,13 @@ function Hero() {
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <span className="inline-flex items-center gap-2 bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono tracking-widest uppercase px-3 py-1.5 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Промышленное проектирование
+            Электротехническое моделирование и проектирование
           </span>
           <h1 className="text-4xl md:text-6xl font-bold text-white leading-[1.1] max-w-3xl mb-6">
-            Электроснабжение и автоматика для промышленных предприятий
+            Проектирование систем электроснабжения и автоматизации
           </h1>
           <p className="text-slate-400 text-lg md:text-xl max-w-xl mb-10 leading-relaxed">
-            Проектируем системы электроснабжения, РЗА и АСУ ТП под ключ. 200+ реализованных объектов по всей России.
+            Разрабатываем проектную и рабочую документацию для промышленных объектов и коммерческих предприятий. РЗА, АСУ ТП, кабельные сети — под ключ.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8">
@@ -387,12 +389,17 @@ function About() {
 
 function Contacts() {
   const [files, setFiles] = useState<File[]>([])
+  const [name, setName] = useState('')
+  const [contact, setContact] = useState('')
+  const [objectName, setObjectName] = useState('')
+  const [description, setDescription] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const MAX_FILES = 10
 
   const handleFiles = (incoming: FileList | null) => {
     if (!incoming) return
-    const next = [...files, ...Array.from(incoming)].slice(0, MAX_FILES)
-    setFiles(next)
+    setFiles(prev => [...prev, ...Array.from(incoming)].slice(0, MAX_FILES))
   }
 
   const removeFile = (idx: number) => setFiles(f => f.filter((_, i) => i !== idx))
@@ -400,6 +407,34 @@ function Contacts() {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     handleFiles(e.dataTransfer.files)
+  }
+
+  const toBase64 = (file: File): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve((reader.result as string).split(',')[1])
+      reader.onerror = reject
+      reader.readAsDataURL(file)
+    })
+
+  const handleSubmit = async () => {
+    if (!name || !contact) return
+    setStatus('loading')
+    try {
+      const filesData = await Promise.all(
+        files.map(async f => ({ name: f.name, content: await toBase64(f), size: f.size }))
+      )
+      const res = await fetch(SEND_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, contact, object_name: objectName, description, files: filesData }),
+      })
+      if (!res.ok) throw new Error()
+      setStatus('success')
+      setName(''); setContact(''); setObjectName(''); setDescription(''); setFiles([])
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -430,63 +465,97 @@ function Contacts() {
             </div>
           </div>
           <div className="bg-slate-800 border border-slate-700 p-8">
-            <p className="text-white font-semibold mb-6">Оставить заявку</p>
-            <div className="space-y-3">
-              <input placeholder="Ваше имя" className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors" />
-              <input placeholder="Телефон или Email" className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors" />
-              <input placeholder="Название объекта" className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors" />
-              <textarea placeholder="Краткое описание задачи" rows={3} className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors resize-none" />
-
-              <div>
-                <label
-                  htmlFor="file-upload"
-                  onDrop={handleDrop}
-                  onDragOver={e => e.preventDefault()}
-                  className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed px-4 py-5 cursor-pointer transition-colors ${
-                    files.length >= MAX_FILES
-                      ? 'border-slate-700 opacity-50 cursor-not-allowed'
-                      : 'border-slate-600 hover:border-emerald-500'
-                  }`}
-                >
-                  <Icon name="Paperclip" size={18} className="text-slate-400" />
-                  <span className="text-slate-400 text-xs text-center">
-                    {files.length >= MAX_FILES
-                      ? 'Максимум 10 файлов добавлено'
-                      : <>Прикрепить файлы <span className="text-slate-500">({files.length}/{MAX_FILES})</span><br />ТЗ, схемы, чертежи — любые форматы</>
-                    }
-                  </span>
-                  <input
-                    id="file-upload"
-                    type="file"
-                    multiple
-                    className="hidden"
-                    disabled={files.length >= MAX_FILES}
-                    onChange={e => handleFiles(e.target.files)}
-                  />
-                </label>
-                {files.length > 0 && (
-                  <div className="mt-2 space-y-1.5">
-                    {files.map((f, i) => (
-                      <div key={i} className="flex items-center justify-between bg-slate-900 border border-slate-700 px-3 py-2">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <Icon name="File" size={13} className="text-emerald-400 shrink-0" />
-                          <span className="text-slate-300 text-xs truncate">{f.name}</span>
-                          <span className="text-slate-500 text-xs shrink-0">{(f.size / 1024).toFixed(0)} КБ</span>
-                        </div>
-                        <button onClick={() => removeFile(i)} className="text-slate-500 hover:text-red-400 transition-colors ml-2 shrink-0">
-                          <Icon name="X" size={13} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
+            {status === 'success' ? (
+              <div className="flex flex-col items-center justify-center h-full py-12 gap-4">
+                <div className="w-14 h-14 bg-emerald-600/20 border border-emerald-500 flex items-center justify-center">
+                  <Icon name="CheckCheck" size={24} className="text-emerald-400" />
+                </div>
+                <p className="text-white font-semibold text-lg">Заявка отправлена!</p>
+                <p className="text-slate-400 text-sm text-center">Инженер свяжется с вами в течение одного рабочего дня.</p>
+                <button onClick={() => setStatus('idle')} className="text-emerald-400 text-sm hover:underline mt-2">Отправить ещё одну заявку</button>
               </div>
-
-              <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-5">
-                Отправить заявку
-              </Button>
-              <p className="text-slate-500 text-xs text-center">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных</p>
-            </div>
+            ) : (
+              <>
+                <p className="text-white font-semibold mb-6">Оставить заявку</p>
+                <div className="space-y-3">
+                  <input
+                    value={name} onChange={e => setName(e.target.value)}
+                    placeholder="Ваше имя *"
+                    className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  />
+                  <input
+                    value={contact} onChange={e => setContact(e.target.value)}
+                    placeholder="Телефон или Email *"
+                    className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  />
+                  <input
+                    value={objectName} onChange={e => setObjectName(e.target.value)}
+                    placeholder="Название объекта"
+                    className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors"
+                  />
+                  <textarea
+                    value={description} onChange={e => setDescription(e.target.value)}
+                    placeholder="Краткое описание задачи"
+                    rows={3}
+                    className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+                  />
+                  <div>
+                    <label
+                      htmlFor="file-upload"
+                      onDrop={handleDrop}
+                      onDragOver={e => e.preventDefault()}
+                      className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed px-4 py-5 cursor-pointer transition-colors ${
+                        files.length >= MAX_FILES ? 'border-slate-700 opacity-50 cursor-not-allowed' : 'border-slate-600 hover:border-emerald-500'
+                      }`}
+                    >
+                      <Icon name="Paperclip" size={18} className="text-slate-400" />
+                      <span className="text-slate-400 text-xs text-center">
+                        {files.length >= MAX_FILES
+                          ? 'Максимум 10 файлов добавлено'
+                          : <>{`Прикрепить файлы (${files.length}/${MAX_FILES})`}<br />ТЗ, схемы, чертежи — любые форматы</>
+                        }
+                      </span>
+                      <input
+                        id="file-upload"
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        className="hidden"
+                        disabled={files.length >= MAX_FILES}
+                        onChange={e => handleFiles(e.target.files)}
+                      />
+                    </label>
+                    {files.length > 0 && (
+                      <div className="mt-2 space-y-1.5">
+                        {files.map((f, i) => (
+                          <div key={i} className="flex items-center justify-between bg-slate-900 border border-slate-700 px-3 py-2">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <Icon name="File" size={13} className="text-emerald-400 shrink-0" />
+                              <span className="text-slate-300 text-xs truncate">{f.name}</span>
+                              <span className="text-slate-500 text-xs shrink-0">{(f.size / 1024).toFixed(0)} КБ</span>
+                            </div>
+                            <button onClick={() => removeFile(i)} className="text-slate-500 hover:text-red-400 transition-colors ml-2 shrink-0">
+                              <Icon name="X" size={13} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {status === 'error' && (
+                    <p className="text-red-400 text-xs text-center">Ошибка отправки. Попробуйте ещё раз или напишите на elco72@mail.ru</p>
+                  )}
+                  <Button
+                    onClick={handleSubmit}
+                    disabled={status === 'loading' || !name || !contact}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold py-5"
+                  >
+                    {status === 'loading' ? 'Отправляем...' : 'Отправить заявку'}
+                  </Button>
+                  <p className="text-slate-500 text-xs text-center">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -502,7 +571,7 @@ function Footer() {
           <div className="w-6 h-6 bg-emerald-600 flex items-center justify-center">
             <Icon name="Zap" size={12} className="text-white" />
           </div>
-          <span className="text-slate-400 text-sm">ЭлектроПроект © 2024</span>
+          <span className="text-slate-400 text-sm">ЭТМПРО © 2024</span>
         </div>
         <div className="flex items-center gap-6">
           {NAV_LINKS.map(l => (
