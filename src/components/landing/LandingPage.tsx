@@ -10,49 +10,91 @@ const NAV_LINKS = [
   { label: 'Проекты', href: '#projects' },
   { label: 'Калькулятор', href: '#calculator' },
   { label: 'О компании', href: '#about' },
+  { label: 'Нормативы', href: '#normative' },
   { label: 'Контакты', href: '#contacts' },
 ]
 
 const SERVICES = [
-  { icon: 'Zap', title: 'Электроснабжение', desc: 'Внутреннее и наружное электроснабжение 0,4–10 кВ. Однолинейные схемы, расчёты токов КЗ, выбор оборудования, ВРУ, ГРЩ, ТП.' },
-  { icon: 'Cable', title: 'Наружные сети 0,4–10 кВ', desc: 'Проектирование кабельных и воздушных линий электропередачи, трансформаторных подстанций, подключение к сетям.' },
+  { icon: 'Zap', title: 'Электроснабжение', desc: 'Разработка проекта для систем электрики: внутреннее и наружное электроснабжение 0,4–110 кВ. Однолинейные схемы, расчёты токов КЗ, выбор оборудования, ВРУ, ГРЩ, ТП.' },
+  { icon: 'Cable', title: 'Наружные сети 0,4–110 кВ', desc: 'Создание алгоритмов и трассировка кабельных линий, проектирование трансформаторных подстанций (ТП, КТП, РП), подключение к сетям.' },
   { icon: 'Sun', title: 'Освещение', desc: 'Внутреннее и наружное освещение: расчёты по ГОСТ, светотехнические расчёты, рабочие чертежи, спецификации оборудования.' },
   { icon: 'Sparkles', title: 'Архитектурная подсветка', desc: 'Концептуальное и рабочее проектирование декоративного и архитектурного освещения фасадов, территорий, малых форм.' },
   { icon: 'CloudLightning', title: 'Молниезащита и заземление', desc: 'Расчёт и проектирование систем молниезащиты, заземляющих устройств в соответствии с РД 34, ГОСТ Р МЭК 62305.' },
+  { icon: 'Settings', title: 'Автоматизация производства', desc: 'Создание алгоритмов и автоматизации производственных объектов: АСУ ТП, системы управления, диспетчеризация технологических процессов.' },
+  { icon: 'Shield', title: 'Подбор индивидуального оборудования', desc: 'Подбор индивидуального оборудования (УКРМ, ИБП, стабилизаторы): компенсация реактивной мощности, резервное питание, защита от скачков напряжения.' },
+  { icon: 'ClipboardCheck', title: 'Бесплатная экспертиза проекта', desc: 'Бесплатный аудит вашей проектной документации: выявим несоответствия нормативным требованиям, ошибки в схемах и расчётах. Без обязательств.' },
+  { icon: 'FolderOpen', title: 'Исполнительная документация', desc: 'Комплекты исполнительной документации по выполненным работам: акты скрытых работ, исполнительные схемы, протоколы испытаний, ведомости смонтированного оборудования.' },
   { icon: 'FileText', title: 'Полный комплект документации', desc: 'Проектная (ПД) и рабочая (РД) документация по ГОСТ Р 21.101-2026. Спецификации, ведомости, сметы по запросу.' },
 ]
 
 const PROJECTS = [
-  { title: 'Торговый центр', voltage: '10 кВ', year: '2024', area: '22 000 м²', desc: 'Электроснабжение, внутреннее и наружное освещение, архитектурная подсветка фасада, молниезащита' },
   { title: 'Производственный корпус (завод)', voltage: '10 кВ', year: '2024', area: '18 500 м²', desc: 'ТП 10/0,4 кВ, силовое электроснабжение цехов, наружные кабельные сети, освещение' },
-  { title: 'Ресторанный комплекс', voltage: '0,4 кВ', year: '2024', area: '2 800 м²', desc: 'Электроснабжение, декоративная подсветка интерьера и фасада, система освещения зала' },
+  { title: 'Промышленное предприятие (металлообработка)', voltage: '10 кВ', year: '2024', area: '32 000 м²', desc: 'Электроснабжение, АСУ ТП, РУ-10 кВ, РУ-0,4 кВ, молниезащита, заземление' },
+  { title: 'Подстанция 110/10 кВ', voltage: '110 кВ', year: '2023', area: '—', desc: 'Проектирование подстанции: ОРУ-110 кВ, КРУ-10 кВ, РЗА, СОПТ, оперативные схемы' },
+  { title: 'КТП 10/0,4 кВ промышленного предприятия', voltage: '10 кВ', year: '2024', area: '—', desc: 'КТП наружной установки, РУ-10 кВ, РУ-0,4 кВ, учёт электроэнергии, ввод в работу' },
+  { title: 'Пищевое производство', voltage: '0,4 кВ', year: '2023', area: '6 700 м²', desc: 'Силовое электроснабжение линий, освещение чистых помещений, заземление оборудования' },
   { title: 'Складской комплекс (логистика)', voltage: '10 кВ', year: '2023', area: '41 000 м²', desc: 'Наружные сети 10 кВ, ТП, внутреннее освещение, молниезащита и заземление' },
   { title: 'Автосервис / автомойка', voltage: '0,4 кВ', year: '2023', area: '3 200 м²', desc: 'Силовое электроснабжение, освещение рабочих зон, наружное освещение территории' },
-  { title: 'Фитнес-центр / спортзал', voltage: '0,4 кВ', year: '2024', area: '4 500 м²', desc: 'Электроснабжение, декоративное освещение, наружная подсветка входной группы' },
-  { title: 'Пищевое производство', voltage: '0,4 кВ', year: '2023', area: '6 700 м²', desc: 'Силовое электроснабжение линий, освещение чистых помещений, заземление оборудования' },
-  { title: 'АЗС и топливный комплекс', voltage: '10 кВ', year: '2023', area: '1 800 м²', desc: 'Наружные сети, электроснабжение технологического оборудования, освещение навеса и территории' },
+  { title: 'Торговый центр', voltage: '10 кВ', year: '2024', area: '22 000 м²', desc: 'Электроснабжение, внутреннее и наружное освещение, архитектурная подсветка фасада, молниезащита' },
 ]
 
 const STATS = [
   { value: '200+', label: 'реализованных объектов' },
   { value: '15+', label: 'лет на рынке (с 2010 г.)' },
   { value: '9', label: 'специалистов в команде' },
-  { value: '0,4–10 кВ', label: 'рабочий класс напряжения' },
+  { value: '0,4–110 кВ', label: 'рабочий класс напряжения' },
 ]
 
 const OBJECT_TYPES = [
-  { id: 'tc', label: 'Торговый центр / магазин', base: 350000 },
-  { id: 'restaurant', label: 'Ресторан / кафе / бар', base: 220000 },
-  { id: 'sport', label: 'Фитнес-центр / спортзал', base: 280000 },
   { id: 'industrial', label: 'Производственный корпус', base: 480000 },
+  { id: 'enterprise', label: 'Промышленное предприятие', base: 650000 },
+  { id: 'substation', label: 'Подстанция / КТП / РУ', base: 580000 },
   { id: 'food', label: 'Пищевое производство', base: 520000 },
   { id: 'warehouse', label: 'Склад / логистический центр', base: 220000 },
   { id: 'auto', label: 'Автосервис / автомойка', base: 200000 },
-  { id: 'azs', label: 'АЗС / топливный комплекс', base: 260000 },
-  { id: 'hotel', label: 'Гостиница / хостел', base: 300000 },
-  { id: 'beauty', label: 'Салон красоты / СПА', base: 180000 },
+  { id: 'hotel', label: 'Гостиница / АБК', base: 300000 },
+  { id: 'tc', label: 'Торговый центр / магазин', base: 350000 },
+  { id: 'fitness', label: 'Фитнес-центр / спортзал', base: 280000 },
+  { id: 'restaurant', label: 'Ресторан / кафе', base: 220000 },
 ]
-const VOLTAGE_MULT: Record<string, number> = { '04': 1, '10': 1.35 }
+
+const VOLTAGE_OPTIONS = [
+  { v: '04', l: '0,4 кВ', mult: 1 },
+  { v: '10', l: '10 кВ', mult: 1.35 },
+  { v: '35', l: '35 кВ', mult: 1.8 },
+  { v: '110', l: '110 кВ', mult: 2.5 },
+]
+
+const NORMATIVE_DOCS = [
+  { code: 'ГОСТ Р 21.101-2026', title: 'Основные требования к проектной и рабочей документации', scope: 'Все разделы' },
+  { code: 'ПУЭ (7-е изд.)', title: 'Правила устройства электроустановок', scope: 'Все разделы' },
+  { code: 'СП 256.1325800.2022', title: 'Электроустановки жилых и общественных зданий', scope: 'Электроснабжение' },
+  { code: 'СП 31-110-2003', title: 'Проектирование и монтаж электроустановок жилых и общественных зданий', scope: 'Электроснабжение' },
+  { code: 'ГОСТ Р 50571 (серия)', title: 'Электроустановки низкого напряжения', scope: 'Электроснабжение 0,4 кВ' },
+  { code: 'РД 34.20.185-94 (СО 153)', title: 'Инструкция по проектированию городских электрических сетей', scope: 'Наружные сети' },
+  { code: 'СП 76.13330.2016', title: 'Электротехнические устройства (актуализ. СНиП 3.05.06-85)', scope: 'Наружные сети, монтаж' },
+  { code: 'ГОСТ 31565-2012', title: 'Кабельные изделия. Требования пожарной безопасности', scope: 'Кабельные линии' },
+  { code: 'СО 153-34.48.519-2002', title: 'Прокладка кабелей напряжением до 500 кВ в земляных траншеях', scope: 'Кабель в земле' },
+  { code: 'ГОСТ Р МЭК 60364-5-52', title: 'Выбор и монтаж электрооборудования. Кабельные системы', scope: 'Кабель по воздуху / лоткам' },
+  { code: 'СП 52.13330.2016', title: 'Естественное и искусственное освещение (актуализ. СНиП 23-05-95)', scope: 'Освещение' },
+  { code: 'ГОСТ Р 55710-2013', title: 'Освещение рабочих мест внутри зданий. Нормы и методы измерений', scope: 'Освещение рабочих мест' },
+  { code: 'МЭК 60598 / ГОСТ Р МЭК 60598', title: 'Светильники. Общие требования и методы испытаний', scope: 'Осветительные приборы' },
+  { code: 'СО 153-34.21.122-2003 (РД 34)', title: 'Инструкция по устройству молниезащиты зданий и сооружений', scope: 'Молниезащита' },
+  { code: 'ГОСТ Р МЭК 62305 (серия)', title: 'Защита от грозовых перенапряжений', scope: 'Молниезащита / УЗИП' },
+  { code: 'ГОСТ 12.1.030-81 ССБТ', title: 'Защитное заземление и зануление', scope: 'Заземление' },
+  { code: 'ГОСТ Р МЭК 61936-1', title: 'Электроустановки переменного тока выше 1 кВ', scope: 'Высоковольтные установки' },
+  { code: 'НТП ЭПП-94', title: 'Нормы технологического проектирования понизительных подстанций', scope: 'Подстанции 35–110 кВ' },
+  { code: 'СО 34.35.301', title: 'Типовые объёмы работ РЗА', scope: 'РЗА / Подстанции' },
+  { code: 'ГОСТ Р 55614-2013', title: 'Источники бесперебойного питания (ИБП)', scope: 'ИБП / резервное питание' },
+  { code: 'ГОСТ Р МЭК 61439 (серия)', title: 'Низковольтные комплектные устройства распределения и управления', scope: 'ВРУ, ГРЩ, ШР' },
+  { code: 'ГОСТ Р 54149-2010 / EN 50160', title: 'Показатели качества электроэнергии', scope: 'УКРМ / качество питания' },
+  { code: 'СП 4.13130.2013', title: 'Системы противопожарной защиты. Ограничение распространения пожара', scope: 'Противопожарные разрывы' },
+  { code: 'Приказ Минстроя № 985/пр', title: 'Правила разработки и оформления ПД и РД', scope: 'Состав документации' },
+]
+
+function scrollTo(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+}
 
 function Navbar() {
   const [open, setOpen] = useState(false)
@@ -79,7 +121,7 @@ function Navbar() {
           <a href="tel:+79782203380" className="text-sm font-semibold text-slate-800 hover:text-emerald-600 transition-colors">
             +7 978 220-33-80
           </a>
-          <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white">
+          <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => scrollTo('contacts')}>
             Оставить заявку
           </Button>
         </div>
@@ -94,12 +136,49 @@ function Navbar() {
               {l.label}
             </a>
           ))}
-          <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white mt-2">
+          <Button size="sm" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white mt-2" onClick={() => { setOpen(false); scrollTo('contacts') }}>
             Оставить заявку
           </Button>
         </div>
       )}
     </header>
+  )
+}
+
+function CircuitPattern() {
+  return (
+    <svg
+      className="absolute inset-0 w-full h-full opacity-[0.07]"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid slice"
+    >
+      <defs>
+        <pattern id="circuit" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="30" x2="30" y2="30" stroke="#10b981" strokeWidth="1"/>
+          <line x1="30" y1="30" x2="30" y2="0" stroke="#10b981" strokeWidth="1"/>
+          <circle cx="30" cy="30" r="3" fill="none" stroke="#10b981" strokeWidth="1"/>
+          <line x1="30" y1="30" x2="90" y2="30" stroke="#10b981" strokeWidth="1"/>
+          <line x1="90" y1="30" x2="90" y2="60" stroke="#10b981" strokeWidth="1"/>
+          <circle cx="90" cy="60" r="3" fill="#10b981"/>
+          <line x1="90" y1="60" x2="120" y2="60" stroke="#10b981" strokeWidth="1"/>
+          <line x1="60" y1="30" x2="60" y2="90" stroke="#10b981" strokeWidth="1"/>
+          <line x1="60" y1="90" x2="0" y2="90" stroke="#10b981" strokeWidth="1"/>
+          <circle cx="60" cy="90" r="2.5" fill="none" stroke="#10b981" strokeWidth="1"/>
+          <rect x="40" y="25" width="20" height="10" fill="none" stroke="#10b981" strokeWidth="1"/>
+          <line x1="0" y1="60" x2="20" y2="60" stroke="#10b981" strokeWidth="1"/>
+          <circle cx="20" cy="60" r="2" fill="#10b981" opacity="0.6"/>
+          <line x1="60" y1="60" x2="80" y2="60" stroke="#10b981" strokeWidth="1"/>
+          <rect x="80" y="55" width="10" height="10" fill="none" stroke="#10b981" strokeWidth="1"/>
+          <line x1="90" y1="90" x2="120" y2="90" stroke="#10b981" strokeWidth="1"/>
+          <line x1="90" y1="90" x2="90" y2="120" stroke="#10b981" strokeWidth="1"/>
+          <circle cx="90" cy="90" r="3" fill="none" stroke="#10b981" strokeWidth="1"/>
+          <line x1="120" y1="30" x2="120" y2="0" stroke="#10b981" strokeWidth="1"/>
+          <line x1="30" y1="120" x2="30" y2="90" stroke="#10b981" strokeWidth="1"/>
+          <circle cx="30" cy="90" r="2" fill="#10b981" opacity="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#circuit)"/>
+    </svg>
   )
 }
 
@@ -113,23 +192,37 @@ function Hero() {
           backgroundSize: '48px 48px',
         }}
       />
+      <CircuitPattern />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-transparent to-slate-900/80 pointer-events-none" />
       <div className="relative max-w-7xl mx-auto px-6 py-24 md:py-32">
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <span className="inline-flex items-center gap-2 bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono tracking-widest uppercase px-3 py-1.5 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             Электротехническое моделирование и проектирование
           </span>
-          <h1 className="text-4xl md:text-6xl font-bold text-white leading-[1.1] max-w-3xl mb-6">
-            Проектирование систем электроснабжения и автоматизации
+          <h1 className="text-4xl md:text-6xl font-bold text-white leading-[1.1] max-w-3xl mb-4">
+            Разработка проекта для систем электрики
           </h1>
+          <p className="text-emerald-400 font-mono text-base md:text-lg mb-3">
+            Создание алгоритмов и автоматизации производственных объектов
+          </p>
           <p className="text-slate-400 text-lg md:text-xl max-w-xl mb-10 leading-relaxed">
-            Проектируем системы электроснабжения и автоматизации для промышленных объектов и коммерческих предприятий. Полный комплект документации по ГОСТ Р 21.101-2026.
+            Подбор индивидуального оборудования (УКРМ, ИБП, стабилизаторы) — полный комплект документации по ГОСТ Р 21.101-2026.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8">
+            <Button
+              size="lg"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-8"
+              onClick={() => scrollTo('calculator')}
+            >
               Рассчитать стоимость
             </Button>
-            <Button size="lg" variant="outline" className="border-slate-600 text-slate-300 hover:border-emerald-500 hover:text-emerald-400 bg-transparent">
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-slate-600 text-slate-300 hover:border-emerald-500 hover:text-emerald-400 bg-transparent"
+              onClick={() => scrollTo('projects')}
+            >
               Смотреть проекты
             </Button>
           </div>
@@ -218,7 +311,7 @@ function Calculator() {
   const [objType, setObjType] = useState(OBJECT_TYPES[0].id)
   const [area, setArea] = useState(1000)
   const [areaInput, setAreaInput] = useState('1000')
-  const [voltage, setVoltage] = useState('04')
+  const [voltages, setVoltages] = useState<string[]>(['04'])
   const [hasLighting, setHasLighting] = useState(false)
   const [hasArchlight, setHasArchlight] = useState(false)
   const [hasLightning, setHasLightning] = useState(false)
@@ -234,12 +327,21 @@ function Calculator() {
     setAreaInput(String(val))
   }
 
-  const base = OBJECT_TYPES.find(o => o.id === objType)?.base ?? 350000
+  const toggleVoltage = (v: string) => {
+    setVoltages(prev =>
+      prev.includes(v) ? (prev.length > 1 ? prev.filter(x => x !== v) : prev) : [...prev, v]
+    )
+  }
+
+  const base = OBJECT_TYPES.find(o => o.id === objType)?.base ?? 480000
   const areaCoeff = 0.7 + (area / 10000) * 0.9
-  const voltCoeff = VOLTAGE_MULT[voltage] ?? 1
+  const voltCoeff = voltages.reduce((acc, v) => {
+    const opt = VOLTAGE_OPTIONS.find(o => o.v === v)
+    return Math.max(acc, opt?.mult ?? 1)
+  }, 1) + (voltages.length > 1 ? 0.15 : 0)
   const extras = (hasLighting ? 80000 : 0) + (hasArchlight ? 120000 : 0) + (hasLightning ? 60000 : 0)
   const total = Math.round((base * areaCoeff * voltCoeff + extras) / 10000) * 10000
-  const days = Math.round(20 + (area / 5000) * 10 + (hasArchlight ? 10 : 0))
+  const days = Math.round(20 + (area / 5000) * 10 + (hasArchlight ? 10 : 0) + (voltages.length > 1 ? 10 : 0))
 
   return (
     <section id="calculator" className="bg-white py-20 border-b border-slate-200">
@@ -292,22 +394,27 @@ function Calculator() {
               </div>
             </div>
             <div>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Класс напряжения</p>
-              <div className="grid grid-cols-2 gap-2">
-                {[{ v: '04', l: '0,4 кВ' }, { v: '10', l: '10 кВ' }].map(({ v, l }) => (
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Класс напряжения</p>
+              <p className="text-xs text-slate-400 mb-3">Можно выбрать несколько (например, РУ-10 кВ и РУ-0,4 кВ одновременно)</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {VOLTAGE_OPTIONS.map(({ v, l }) => (
                   <button
                     key={v}
-                    onClick={() => setVoltage(v)}
+                    onClick={() => toggleVoltage(v)}
                     className={`py-3 text-sm font-mono border transition-colors ${
-                      voltage === v
+                      voltages.includes(v)
                         ? 'border-emerald-600 bg-emerald-50 text-emerald-800 font-semibold'
                         : 'border-slate-200 text-slate-600 hover:border-slate-400'
                     }`}
                   >
+                    {voltages.includes(v) && <span className="mr-1 text-emerald-600">✓</span>}
                     {l}
                   </button>
                 ))}
               </div>
+              {voltages.length > 1 && (
+                <p className="text-xs text-emerald-600 mt-2 font-mono">Выбрано: {voltages.map(v => VOLTAGE_OPTIONS.find(o => o.v === v)?.l).join(' + ')}</p>
+              )}
             </div>
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Дополнительные разделы</p>
@@ -321,11 +428,9 @@ function Calculator() {
                     <div className="flex items-center gap-3">
                       <div
                         onClick={() => set(!val)}
-                        className={`w-5 h-5 border-2 flex items-center justify-center shrink-0 transition-colors ${
-                          val ? 'border-emerald-600 bg-emerald-600' : 'border-slate-300'
-                        }`}
+                        className={`w-4 h-4 border-2 flex items-center justify-center transition-colors cursor-pointer ${val ? 'bg-emerald-600 border-emerald-600' : 'border-slate-300'}`}
                       >
-                        {val && <Icon name="Check" size={11} className="text-white" />}
+                        {val && <Icon name="Check" size={10} className="text-white" />}
                       </div>
                       <span className="text-sm text-slate-700">{label}</span>
                     </div>
@@ -359,7 +464,7 @@ function Calculator() {
                 </div>
               </div>
               <p className="text-slate-500 text-xs mt-5 leading-relaxed">Расчёт ориентировочный. Точная стоимость — после изучения ТЗ.</p>
-              <Button className="w-full mt-5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold">
+              <Button className="w-full mt-5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold" onClick={() => scrollTo('contacts')}>
                 Получить точный расчёт
               </Button>
             </div>
@@ -370,16 +475,55 @@ function Calculator() {
   )
 }
 
+function Normative() {
+  return (
+    <section id="normative" className="bg-slate-50 py-20 border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-6">
+        <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">Нормативная база</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Документы, по которым работаем</h2>
+        <p className="text-slate-500 mb-10 max-w-2xl">Вся документация разрабатывается строго в соответствии с действующими нормативными документами. Ниже — перечень основных стандартов и сводов правил.</p>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="bg-slate-900 text-white">
+                <th className="text-left px-4 py-3 font-mono text-xs tracking-wider w-64">Обозначение</th>
+                <th className="text-left px-4 py-3 font-mono text-xs tracking-wider">Наименование</th>
+                <th className="text-left px-4 py-3 font-mono text-xs tracking-wider w-48 hidden sm:table-cell">Область применения</th>
+              </tr>
+            </thead>
+            <tbody>
+              {NORMATIVE_DOCS.map((doc, i) => (
+                <motion.tr
+                  key={doc.code}
+                  className={`border-b border-slate-200 hover:bg-white transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: i * 0.03 }}
+                >
+                  <td className="px-4 py-3 font-mono text-xs text-emerald-700 font-semibold align-top">{doc.code}</td>
+                  <td className="px-4 py-3 text-slate-700 align-top">{doc.title}</td>
+                  <td className="px-4 py-3 text-slate-400 text-xs align-top hidden sm:table-cell">{doc.scope}</td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function About() {
   return (
-    <section id="about" className="bg-slate-50 py-20 border-b border-slate-200">
+    <section id="about" className="bg-white py-20 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
           <div>
             <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">О компании</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Проектируем с 2010 года</h2>
             <p className="text-slate-600 leading-relaxed mb-5">
-              Специализируемся на проектировании систем электроснабжения, освещения, молниезащиты и архитектурной подсветки для торговых, производственных, складских и коммерческих объектов.
+              Специализируемся на проектировании систем электроснабжения, освещения, молниезащиты и архитектурной подсветки для производственных, промышленных, складских и коммерческих объектов. Разработка проекта для систем электрики — наш профиль с первого дня.
             </p>
             <p className="text-slate-600 leading-relaxed mb-8">
               Нас 9 человек — небольшая, но слаженная команда с глубокой экспертизой. Документация выпускается строго по ГОСТ Р 21.101-2026. Работаем по всей России.
@@ -390,6 +534,7 @@ function About() {
                 'ГОСТ Р 21.101-2026 — актуальный стандарт на проектную документацию',
                 'Официальный партнёр IEK, EKF, Sistemf Electric, Chint, КЭАЗ',
                 'Опыт более 15 лет, 200+ реализованных объектов',
+                'Бесплатная экспертиза вашей проектной документации',
               ].map(f => (
                 <div key={f} className="flex items-start gap-3">
                   <Icon name="CheckCircle" size={16} className="text-emerald-600 mt-0.5 shrink-0" />
@@ -402,10 +547,11 @@ function About() {
             {[
               { q: 'Работаете ли вы в регионах?', a: 'Да, работаем по всей России. Выезд на объект обсуждается индивидуально.' },
               { q: 'Сколько занимает проектирование?', a: 'От 20 рабочих дней для небольших объектов. Срок зависит от площади и состава разделов — рассчитаем точно после изучения ТЗ.' },
-              { q: 'Делаете ли проекты для квартир и жилых домов?', a: 'Нет, мы специализируемся на коммерческих и производственных объектах: ТЦ, рестораны, склады, производство, спортзалы, АЗС и т.д.' },
+              { q: 'Делаете ли проекты для квартир и жилых домов?', a: 'Нет, мы специализируемся на коммерческих и производственных объектах: производственные корпуса, промышленные предприятия, склады, подстанции, пищевое производство и т.д.' },
               { q: 'По какому стандарту оформляете документацию?', a: 'Вся документация выпускается по актуальному ГОСТ Р 21.101-2026 на проектную и рабочую документацию.' },
+              { q: 'Что такое бесплатная экспертиза проекта?', a: 'Мы бесплатно проверим вашу проектную документацию на соответствие нормативным требованиям, выявим ошибки в схемах и расчётах. По итогу дадим заключение — без обязательств заказывать у нас.' },
             ].map(({ q, a }) => (
-              <details key={q} className="bg-white border border-slate-200 group">
+              <details key={q} className="bg-slate-50 border border-slate-200 group">
                 <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none select-none">
                   <span className="font-medium text-slate-900 text-sm">{q}</span>
                   <Icon name="ChevronDown" size={16} className="text-slate-400 group-open:rotate-180 transition-transform shrink-0 ml-3" />
@@ -481,7 +627,7 @@ function Contacts() {
             <div className="space-y-5">
               {[
                 { icon: 'Phone', label: 'Телефон', val: '+7 978 220-33-80' },
-                { icon: 'Mail', label: 'Email', val: 'elco72@mail.ru' },
+                { icon: 'Mail', label: 'Email', val: 'info@etmpro.ru' },
                 { icon: 'MapPin', label: 'Адрес', val: 'Москва, ул. Промышленная, 12, офис 301' },
                 { icon: 'Clock', label: 'График', val: 'Пн–Пт, 9:00–18:00 (МСК)' },
               ].map(({ icon, label, val }) => (
@@ -500,73 +646,74 @@ function Contacts() {
           <div className="bg-slate-800 border border-slate-700 p-8">
             {status === 'success' ? (
               <div className="flex flex-col items-center justify-center h-full py-12 gap-4">
-                <div className="w-14 h-14 bg-emerald-600/20 border border-emerald-500 flex items-center justify-center">
-                  <Icon name="CheckCheck" size={24} className="text-emerald-400" />
+                <div className="w-14 h-14 bg-emerald-600/20 border border-emerald-600/30 flex items-center justify-center">
+                  <Icon name="CheckCircle" size={28} className="text-emerald-400" />
                 </div>
-                <p className="text-white font-semibold text-lg">Заявка отправлена!</p>
-                <p className="text-slate-400 text-sm text-center">Инженер свяжется с вами в течение одного рабочего дня.</p>
-                <button onClick={() => setStatus('idle')} className="text-emerald-400 text-sm hover:underline mt-2">Отправить ещё одну заявку</button>
+                <p className="text-white font-semibold text-lg text-center">Заявка отправлена!</p>
+                <p className="text-slate-400 text-sm text-center">Свяжемся с вами в течение одного рабочего дня.</p>
+                <button onClick={() => setStatus('idle')} className="text-emerald-400 text-sm hover:text-emerald-300 transition-colors mt-2">
+                  Отправить ещё одну заявку
+                </button>
               </div>
             ) : (
               <>
-                <p className="text-white font-semibold mb-6">Оставить заявку</p>
-                <div className="space-y-3">
-                  <input
-                    value={name} onChange={e => setName(e.target.value)}
-                    placeholder="Ваше имя *"
-                    className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors"
-                  />
-                  <input
-                    value={contact} onChange={e => setContact(e.target.value)}
-                    placeholder="Телефон или Email *"
-                    className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors"
-                  />
-                  <input
-                    value={objectName} onChange={e => setObjectName(e.target.value)}
-                    placeholder="Название объекта"
-                    className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors"
-                  />
-                  <textarea
-                    value={description} onChange={e => setDescription(e.target.value)}
-                    placeholder="Краткое описание задачи"
-                    rows={3}
-                    className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors resize-none"
-                  />
+                <p className="text-white font-semibold text-lg mb-6">Оставить заявку</p>
+                <div className="space-y-4">
                   <div>
-                    <label
-                      htmlFor="file-upload"
+                    <label className="text-slate-400 text-xs uppercase tracking-wider block mb-1.5">Ваше имя *</label>
+                    <input
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      placeholder="Иван Петров"
+                      className="w-full bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white placeholder-slate-500 px-4 py-3 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs uppercase tracking-wider block mb-1.5">Телефон или Email *</label>
+                    <input
+                      value={contact}
+                      onChange={e => setContact(e.target.value)}
+                      placeholder="+7 900 000-00-00 или email"
+                      className="w-full bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white placeholder-slate-500 px-4 py-3 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs uppercase tracking-wider block mb-1.5">Название объекта</label>
+                    <input
+                      value={objectName}
+                      onChange={e => setObjectName(e.target.value)}
+                      placeholder="Производственный корпус, склад..."
+                      className="w-full bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white placeholder-slate-500 px-4 py-3 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs uppercase tracking-wider block mb-1.5">Описание задачи</label>
+                    <textarea
+                      value={description}
+                      onChange={e => setDescription(e.target.value)}
+                      placeholder="Опишите задачу или прикрепите ТЗ..."
+                      rows={3}
+                      className="w-full bg-slate-700 border border-slate-600 focus:border-emerald-500 focus:outline-none text-white placeholder-slate-500 px-4 py-3 text-sm resize-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-slate-400 text-xs uppercase tracking-wider block mb-1.5">Файлы (до {MAX_FILES})</label>
+                    <div
+                      className="border border-dashed border-slate-600 hover:border-slate-500 transition-colors p-4 text-center cursor-pointer"
                       onDrop={handleDrop}
                       onDragOver={e => e.preventDefault()}
-                      className={`flex flex-col items-center justify-center gap-2 border-2 border-dashed px-4 py-5 cursor-pointer transition-colors ${
-                        files.length >= MAX_FILES ? 'border-slate-700 opacity-50 cursor-not-allowed' : 'border-slate-600 hover:border-emerald-500'
-                      }`}
+                      onClick={() => fileInputRef.current?.click()}
                     >
-                      <Icon name="Paperclip" size={18} className="text-slate-400" />
-                      <span className="text-slate-400 text-xs text-center">
-                        {files.length >= MAX_FILES
-                          ? 'Максимум 10 файлов добавлено'
-                          : <>{`Прикрепить файлы (${files.length}/${MAX_FILES})`}<br />ТЗ, схемы, чертежи — любые форматы</>
-                        }
-                      </span>
-                      <input
-                        id="file-upload"
-                        ref={fileInputRef}
-                        type="file"
-                        multiple
-                        className="hidden"
-                        disabled={files.length >= MAX_FILES}
-                        onChange={e => handleFiles(e.target.files)}
-                      />
-                    </label>
+                      <input ref={fileInputRef} type="file" multiple className="hidden" onChange={e => handleFiles(e.target.files)} />
+                      <Icon name="Upload" size={20} className="text-slate-500 mx-auto mb-2" />
+                      <p className="text-slate-500 text-xs">Перетащите файлы или нажмите для выбора</p>
+                    </div>
                     {files.length > 0 && (
-                      <div className="mt-2 space-y-1.5">
+                      <div className="mt-2 space-y-1">
                         {files.map((f, i) => (
-                          <div key={i} className="flex items-center justify-between bg-slate-900 border border-slate-700 px-3 py-2">
-                            <div className="flex items-center gap-2 min-w-0">
-                              <Icon name="File" size={13} className="text-emerald-400 shrink-0" />
-                              <span className="text-slate-300 text-xs truncate">{f.name}</span>
-                              <span className="text-slate-500 text-xs shrink-0">{(f.size / 1024).toFixed(0)} КБ</span>
-                            </div>
+                          <div key={i} className="flex items-center gap-2 text-xs text-slate-400 bg-slate-700/50 px-3 py-1.5">
+                            <Icon name="File" size={12} />
+                            <span className="flex-1 truncate">{f.name}</span>
                             <button onClick={() => removeFile(i)} className="text-slate-500 hover:text-red-400 transition-colors ml-2 shrink-0">
                               <Icon name="X" size={13} />
                             </button>
@@ -576,7 +723,7 @@ function Contacts() {
                     )}
                   </div>
                   {status === 'error' && (
-                    <p className="text-red-400 text-xs text-center">Ошибка отправки. Попробуйте ещё раз или напишите на elco72@mail.ru</p>
+                    <p className="text-red-400 text-xs text-center">Ошибка отправки. Попробуйте ещё раз или напишите на info@etmpro.ru</p>
                   )}
                   <Button
                     onClick={handleSubmit}
@@ -604,14 +751,14 @@ function Footer() {
           <div className="w-6 h-6 bg-emerald-600 flex items-center justify-center">
             <Icon name="Zap" size={12} className="text-white" />
           </div>
-          <span className="text-slate-400 text-sm">ЭТМПРО © 2024</span>
+          <span className="text-slate-400 text-sm">ЭТМПРО © 2025</span>
         </div>
         <div className="flex items-center gap-6">
           {NAV_LINKS.map(l => (
             <a key={l.href} href={l.href} className="text-slate-500 hover:text-slate-300 text-xs transition-colors">{l.label}</a>
           ))}
         </div>
-        <p className="text-slate-600 text-xs">ИНН 7712345678 · ОГРН 1097746000000</p>
+        <p className="text-slate-600 text-xs">info@etmpro.ru</p>
       </div>
     </footer>
   )
@@ -626,6 +773,7 @@ export default function LandingPage() {
       <Projects />
       <Calculator />
       <About />
+      <Normative />
       <Contacts />
       <Footer />
     </div>
