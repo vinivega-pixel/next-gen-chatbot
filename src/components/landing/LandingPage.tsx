@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Icon from '@/components/ui/icon'
 
@@ -8,6 +8,7 @@ const SEND_URL = 'https://functions.poehali.dev/f89ef799-3a54-43fb-acc7-b79212ae
 const NAV_LINKS = [
   { label: 'Услуги', href: '#services' },
   { label: 'Проекты', href: '#projects' },
+  { label: 'Образцы', href: '#samples' },
   { label: 'Калькулятор', href: '#calculator' },
   { label: 'О компании', href: '#about' },
   { label: 'Нормативы', href: '#normative' },
@@ -15,16 +16,66 @@ const NAV_LINKS = [
 ]
 
 const SERVICES = [
-  { icon: 'Zap', title: 'Электроснабжение', desc: 'Разработка проекта для систем электрики: внутреннее и наружное электроснабжение 0,4–110 кВ. Однолинейные схемы, расчёты токов КЗ, выбор оборудования, ВРУ, ГРЩ, ТП.' },
-  { icon: 'Cable', title: 'Наружные сети 0,4–110 кВ', desc: 'Создание алгоритмов и трассировка кабельных линий, проектирование трансформаторных подстанций (ТП, КТП, РП), подключение к сетям.' },
-  { icon: 'Sun', title: 'Освещение', desc: 'Внутреннее и наружное освещение: расчёты по ГОСТ, светотехнические расчёты, рабочие чертежи, спецификации оборудования.' },
-  { icon: 'Sparkles', title: 'Архитектурная подсветка', desc: 'Концептуальное и рабочее проектирование декоративного и архитектурного освещения фасадов, территорий, малых форм.' },
-  { icon: 'CloudLightning', title: 'Молниезащита и заземление', desc: 'Расчёт и проектирование систем молниезащиты, заземляющих устройств в соответствии с РД 34, ГОСТ Р МЭК 62305.' },
-  { icon: 'Settings', title: 'Автоматизация производства', desc: 'Создание алгоритмов и автоматизации производственных объектов: АСУ ТП, системы управления, диспетчеризация технологических процессов.' },
-  { icon: 'Shield', title: 'Подбор индивидуального оборудования', desc: 'Подбор индивидуального оборудования (УКРМ, ИБП, стабилизаторы): компенсация реактивной мощности, резервное питание, защита от скачков напряжения.' },
-  { icon: 'ClipboardCheck', title: 'Бесплатная экспертиза проекта', desc: 'Бесплатный аудит вашей проектной документации: выявим несоответствия нормативным требованиям, ошибки в схемах и расчётах. Без обязательств.' },
-  { icon: 'FolderOpen', title: 'Исполнительная документация', desc: 'Комплекты исполнительной документации по выполненным работам: акты скрытых работ, исполнительные схемы, протоколы испытаний, ведомости смонтированного оборудования.' },
-  { icon: 'FileText', title: 'Полный комплект документации', desc: 'Проектная (ПД) и рабочая (РД) документация по ГОСТ Р 21.101-2026. Спецификации, ведомости, сметы по запросу.' },
+  {
+    icon: 'Zap',
+    title: 'Электроснабжение',
+    desc: 'Разработка проекта для систем электрики: внутреннее и наружное электроснабжение 0,4–10 кВ. Однолинейные схемы, расчёты токов КЗ, выбор оборудования, ВРУ, ГРЩ, ТП.',
+    details: ['ЭС — Силовое электрооборудование', 'ЭН — Наружное электроснабжение', 'Принципиальные схемы ВРУ / ГРЩ', 'Расчёт токов КЗ и выбор защит', 'Кабельные журналы и спецификации'],
+  },
+  {
+    icon: 'Cable',
+    title: 'Наружные сети 0,4–10 кВ',
+    desc: 'Создание алгоритмов и трассировка кабельных линий, проектирование трансформаторных подстанций (ТП, КТП, РП), подключение к сетям.',
+    details: ['ЭН — Наружные кабельные и воздушные линии', 'Трансформаторные подстанции ТП / КТП', 'Расстановка опор ВЛ, кабельный журнал', 'Согласование с сетевой организацией', 'Технические условия на присоединение'],
+  },
+  {
+    icon: 'Sun',
+    title: 'Освещение',
+    desc: 'Внутреннее и наружное освещение: расчёты по ГОСТ, светотехнические расчёты, рабочие чертежи, спецификации оборудования.',
+    details: ['ЭО — Внутреннее электроосвещение', 'ЭН — Наружное освещение территории', 'Светотехнические расчёты (DIALux)', 'Щитки освещения и аварийное освещение', 'Планы расположения светильников'],
+  },
+  {
+    icon: 'Sparkles',
+    title: 'Архитектурная подсветка',
+    desc: 'Концептуальное и рабочее проектирование декоративного и архитектурного освещения фасадов, территорий, малых форм.',
+    details: ['Концепция и рабочая документация', 'Подбор прожекторов, лент, контроллеров', 'Управление сценариями освещения', 'Согласование с архитектором', 'Спецификации оборудования'],
+  },
+  {
+    icon: 'CloudLightning',
+    title: 'Молниезащита и заземление',
+    desc: 'Расчёт и проектирование систем молниезащиты, заземляющих устройств в соответствии с РД 34, ГОСТ Р МЭК 62305.',
+    details: ['Расчёт молниезащиты по ГОСТ Р МЭК 62305', 'Заземляющие устройства (ЗУ)', 'Системы УЗИП — защита от перенапряжений', 'Уравнивание потенциалов', 'Протоколы измерений сопротивления'],
+  },
+  {
+    icon: 'Settings',
+    title: 'Автоматизация производства',
+    desc: 'Создание алгоритмов и автоматизации производственных объектов: АСУ ТП, системы управления, диспетчеризация технологических процессов.',
+    details: ['ЭМ — Электрооборудование механизмов', 'АСУ ТП: ПЛК, SCADA, HMI', 'Схемы управления электродвигателями', 'Диспетчеризация и телемеханика', 'Алгоритмы работы технологических линий'],
+  },
+  {
+    icon: 'Shield',
+    title: 'Подбор индивидуального оборудования',
+    desc: 'Подбор индивидуального оборудования (УКРМ, ИБП, стабилизаторы): компенсация реактивной мощности, резервное питание, защита от скачков напряжения.',
+    details: ['ЭГ — Генераторные установки и ИБП', 'УКРМ — компенсация реактивной мощности', 'ИБП для критических нагрузок', 'Стабилизаторы напряжения', 'Дизель-генераторные установки (ДГУ)'],
+  },
+  {
+    icon: 'ClipboardCheck',
+    title: 'Бесплатная экспертиза проекта',
+    desc: 'Бесплатный аудит вашей проектной документации: выявим несоответствия нормативным требованиям, ошибки в схемах и расчётах. Без обязательств.',
+    details: ['Проверка соответствия ПУЭ и ГОСТ', 'Анализ расчётов токов КЗ', 'Контроль состава комплектов РД', 'Выявление ошибок в схемах', 'Письменное заключение по итогам'],
+  },
+  {
+    icon: 'FolderOpen',
+    title: 'Исполнительная документация',
+    desc: 'Комплекты исполнительной документации по выполненным работам: акты скрытых работ, исполнительные схемы, протоколы испытаний.',
+    details: ['Акты освидетельствования скрытых работ', 'Исполнительные схемы прокладки кабелей', 'Протоколы испытаний электрооборудования', 'Ведомости смонтированного оборудования', 'Паспорта заземляющих устройств'],
+  },
+  {
+    icon: 'FileText',
+    title: 'Полный комплект документации',
+    desc: 'Проектная (ПД) и рабочая (РД) документация по ГОСТ Р 21.101-2026. Спецификации, ведомости, сметы по запросу.',
+    details: ['ПД — Проектная документация (ИОС 5.1)', 'РД — Рабочая документация (ЭС, ЭО, ЭН, ЭМ, ЭГ)', 'Спецификации и ведомости оборудования', 'Пояснительные записки и расчёты', 'Сметная документация по запросу'],
+  },
 ]
 
 const PROJECTS = [
@@ -38,11 +89,62 @@ const PROJECTS = [
   { title: 'Торговый центр', voltage: '10 кВ', year: '2024', area: '22 000 м²', desc: 'Электроснабжение, внутреннее и наружное освещение, архитектурная подсветка фасада, молниезащита' },
 ]
 
+const SAMPLES = [
+  {
+    title: 'Однолинейная схема ВРУ',
+    mark: 'ЭС',
+    type: 'Силовое электроснабжение',
+    desc: 'Принципиальная однолинейная схема вводно-распределительного устройства 0,4 кВ с АВР',
+    tags: ['ПД', 'РД', '0,4 кВ'],
+    sheets: 4,
+  },
+  {
+    title: 'Наружное освещение территории',
+    mark: 'ЭН',
+    type: 'Наружные сети / Освещение',
+    desc: 'План расположения опор освещения, трассировка КЛ-0,4 кВ, ведомость опор',
+    tags: ['РД', '0,4 кВ'],
+    sheets: 6,
+  },
+  {
+    title: 'Схема КТП 10/0,4 кВ',
+    mark: 'ЭС',
+    type: 'Электроснабжение',
+    desc: 'Принципиальная схема КТП: РУ-10 кВ, силовые трансформаторы, РУ-0,4 кВ, учёт',
+    tags: ['ПД', 'РД', '10 кВ'],
+    sheets: 8,
+  },
+  {
+    title: 'Освещение производственного цеха',
+    mark: 'ЭО',
+    type: 'Внутреннее освещение',
+    desc: 'План расположения светильников, схема щитка освещения, светотехнический расчёт',
+    tags: ['РД', '0,4 кВ'],
+    sheets: 5,
+  },
+  {
+    title: 'Молниезащита и заземление',
+    mark: 'ЭМЗ',
+    type: 'Молниезащита',
+    desc: 'План молниезащиты кровли, схема заземляющего устройства, расчёт сопротивления',
+    tags: ['ПД', 'РД'],
+    sheets: 3,
+  },
+  {
+    title: 'АСУ ТП насосной станции',
+    mark: 'ЭМ',
+    type: 'Автоматизация',
+    desc: 'Функциональная схема автоматизации, схемы управления насосными агрегатами',
+    tags: ['РД', '0,4 кВ'],
+    sheets: 10,
+  },
+]
+
 const STATS = [
   { value: '200+', label: 'реализованных объектов' },
   { value: '15+', label: 'лет на рынке (с 2010 г.)' },
   { value: '9', label: 'специалистов в команде' },
-  { value: '0,4–110 кВ', label: 'рабочий класс напряжения' },
+  { value: '0,4–10 кВ', label: 'рабочий класс напряжения' },
 ]
 
 const OBJECT_TYPES = [
@@ -61,8 +163,16 @@ const OBJECT_TYPES = [
 const VOLTAGE_OPTIONS = [
   { v: '04', l: '0,4 кВ', mult: 1 },
   { v: '10', l: '10 кВ', mult: 1.35 },
-  { v: '35', l: '35 кВ', mult: 1.8 },
-  { v: '110', l: '110 кВ', mult: 2.5 },
+]
+
+const PROJECT_MARKS = [
+  { id: 'EP', code: 'ЭП', label: 'Электроснабжение (ПД / ИОС 5.1)', desc: 'Раздел проектной документации — система электроснабжения' },
+  { id: 'ES', code: 'ЭС', label: 'Силовое электрооборудование', desc: 'Распределительные устройства, щитовые, питание двигателей и установок' },
+  { id: 'EO', code: 'ЭО', label: 'Внутреннее электроосвещение', desc: 'Осветительные сети, щитки освещения, аварийное освещение' },
+  { id: 'EN', code: 'ЭН', label: 'Наружное электроснабжение', desc: 'Наружные сети, освещение территории, вводы в здание' },
+  { id: 'EM', code: 'ЭМ', label: 'Электрооборудование механизмов', desc: 'Краны, подъёмники, конвейеры, насосы, управление двигателями' },
+  { id: 'EG', code: 'ЭГ', label: 'Электрогенераторные установки', desc: 'Дизель-генераторы, ИБП, схемы резервного ввода' },
+  { id: 'EE', code: 'ЭЭ', label: 'Электроэнергетика / АСКУЭ', desc: 'Системы учёта электроэнергии, коммерческий и технический учёт' },
 ]
 
 const NORMATIVE_DOCS = [
@@ -110,7 +220,7 @@ function Navbar() {
             <p className="text-xs text-slate-500 leading-none mt-0.5">Электротехническое моделирование и проектирование</p>
           </div>
         </div>
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-5">
           {NAV_LINKS.map(l => (
             <a key={l.href} href={l.href} className="text-sm text-slate-600 hover:text-emerald-600 transition-colors font-medium">
               {l.label}
@@ -119,18 +229,18 @@ function Navbar() {
         </nav>
         <div className="hidden md:flex items-center gap-4">
           <a href="tel:+79782203380" className="text-sm font-semibold text-slate-800 hover:text-emerald-600 transition-colors">
-            +7 978 220-33-80
+            +7 978 220-3-380
           </a>
           <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-white" onClick={() => scrollTo('contacts')}>
             Оставить заявку
           </Button>
         </div>
-        <button className="md:hidden p-2" onClick={() => setOpen(!open)}>
+        <button className="lg:hidden p-2" onClick={() => setOpen(!open)}>
           <Icon name={open ? 'X' : 'Menu'} size={22} className="text-slate-700" />
         </button>
       </div>
       {open && (
-        <div className="md:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3">
+        <div className="lg:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3">
           {NAV_LINKS.map(l => (
             <a key={l.href} href={l.href} className="block text-sm text-slate-700 hover:text-emerald-600 py-1" onClick={() => setOpen(false)}>
               {l.label}
@@ -201,7 +311,7 @@ function Hero() {
             Электротехническое моделирование и проектирование
           </span>
           <h1 className="text-4xl md:text-6xl font-bold text-white leading-[1.1] max-w-3xl mb-4">
-            Разработка проекта для систем электрики
+            Проектирование систем электроснабжения и автоматизации
           </h1>
           <p className="text-emerald-400 font-mono text-base md:text-lg mb-3">
             Создание алгоритмов и автоматизации производственных объектов
@@ -240,6 +350,48 @@ function Hero() {
   )
 }
 
+function ServiceCard({ s, i }: { s: typeof SERVICES[0]; i: number }) {
+  const [hovered, setHovered] = useState(false)
+  return (
+    <motion.div
+      className="bg-white p-8 group hover:bg-slate-50 transition-colors relative"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: i * 0.07 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-5 group-hover:bg-emerald-600 group-hover:border-emerald-600 transition-colors">
+        <Icon name={s.icon} size={18} className="text-emerald-600 group-hover:text-white transition-colors" fallback="Zap" />
+      </div>
+      <h3 className="font-semibold text-slate-900 text-lg mb-3">{s.title}</h3>
+      <p className="text-slate-500 text-sm leading-relaxed">{s.desc}</p>
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.18 }}
+            className="absolute left-0 right-0 bottom-0 translate-y-full z-20 bg-slate-900 border border-emerald-700 shadow-xl p-4"
+          >
+            <p className="text-emerald-400 text-xs font-mono uppercase tracking-widest mb-2">Состав:</p>
+            <ul className="space-y-1">
+              {s.details.map(d => (
+                <li key={d} className="flex items-start gap-2 text-xs text-slate-300">
+                  <span className="text-emerald-500 mt-0.5 shrink-0">—</span>
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
+
 function Services() {
   return (
     <section id="services" className="bg-white py-20 border-b border-slate-200">
@@ -248,24 +400,12 @@ function Services() {
           <div>
             <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">Направления</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Что мы проектируем</h2>
+            <p className="text-slate-400 text-sm mt-2">Наведите на карточку — увидите состав документации</p>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-slate-200">
           {SERVICES.map((s, i) => (
-            <motion.div
-              key={s.title}
-              className="bg-white p-8 group hover:bg-slate-50 transition-colors"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.07 }}
-            >
-              <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-5 group-hover:bg-emerald-600 group-hover:border-emerald-600 transition-colors">
-                <Icon name={s.icon} size={18} className="text-emerald-600 group-hover:text-white transition-colors" fallback="Zap" />
-              </div>
-              <h3 className="font-semibold text-slate-900 text-lg mb-3">{s.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{s.desc}</p>
-            </motion.div>
+            <ServiceCard key={s.title} s={s} i={i} />
           ))}
         </div>
       </div>
@@ -307,11 +447,61 @@ function Projects() {
   )
 }
 
+function Samples() {
+  return (
+    <section id="samples" className="bg-white py-20 border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-6">
+        <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">Примеры работ</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Образцы проектов</h2>
+        <p className="text-slate-500 mb-10 max-w-2xl">Примеры состава рабочей и проектной документации по разделам ИОС 5.1. Полные комплекты предоставляем по запросу под NDA.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {SAMPLES.map((s, i) => (
+            <motion.div
+              key={s.title}
+              className="border border-slate-200 bg-white hover:border-emerald-400 transition-colors group p-6"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: i * 0.07 }}
+            >
+              <div className="flex items-start justify-between mb-4">
+                <span className="inline-block bg-emerald-600 text-white text-xs font-mono font-bold px-2.5 py-1">{s.mark}</span>
+                <span className="text-xs text-slate-400 font-mono">{s.sheets} листов</span>
+              </div>
+              <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-emerald-700 transition-colors">{s.title}</h3>
+              <p className="text-slate-400 text-xs mb-3">{s.type}</p>
+              <p className="text-slate-600 text-sm leading-relaxed mb-4">{s.desc}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {s.tags.map(t => (
+                  <span key={t} className="text-xs border border-slate-200 text-slate-500 px-2 py-0.5">{t}</span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        <div className="mt-8 border border-dashed border-emerald-300 bg-emerald-50/50 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="font-semibold text-slate-900">Нужен полный комплект документации в качестве образца?</p>
+            <p className="text-slate-500 text-sm mt-1">Предоставим реальные проекты под соглашением о конфиденциальности (NDA)</p>
+          </div>
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shrink-0" onClick={() => scrollTo('contacts')}>
+            Запросить образцы
+          </Button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function Calculator() {
   const [objType, setObjType] = useState(OBJECT_TYPES[0].id)
   const [area, setArea] = useState(1000)
   const [areaInput, setAreaInput] = useState('1000')
   const [voltages, setVoltages] = useState<string[]>(['04'])
+  const [lineLength, setLineLength] = useState(0)
+  const [lineLengthInput, setLineLengthInput] = useState('0')
+  const [lineType, setLineType] = useState<'none' | 'KL' | 'VL'>('none')
+  const [selectedMarks, setSelectedMarks] = useState<string[]>(['EP'])
   const [hasLighting, setHasLighting] = useState(false)
   const [hasArchlight, setHasArchlight] = useState(false)
   const [hasLightning, setHasLightning] = useState(false)
@@ -327,9 +517,21 @@ function Calculator() {
     setAreaInput(String(val))
   }
 
+  const handleLineLengthInput = (val: string) => {
+    setLineLengthInput(val)
+    const num = parseFloat(val.replace(',', '.'))
+    if (!isNaN(num) && num >= 0) setLineLength(Math.min(num, 100))
+  }
+
   const toggleVoltage = (v: string) => {
     setVoltages(prev =>
       prev.includes(v) ? (prev.length > 1 ? prev.filter(x => x !== v) : prev) : [...prev, v]
+    )
+  }
+
+  const toggleMark = (id: string) => {
+    setSelectedMarks(prev =>
+      prev.includes(id) ? (prev.length > 1 ? prev.filter(x => x !== id) : prev) : [...prev, id]
     )
   }
 
@@ -339,9 +541,11 @@ function Calculator() {
     const opt = VOLTAGE_OPTIONS.find(o => o.v === v)
     return Math.max(acc, opt?.mult ?? 1)
   }, 1) + (voltages.length > 1 ? 0.15 : 0)
+  const lineCoeff = lineType !== 'none' ? lineLength * (lineType === 'KL' ? 35000 : 20000) : 0
+  const marksCoeff = 1 + (selectedMarks.length - 1) * 0.18
   const extras = (hasLighting ? 80000 : 0) + (hasArchlight ? 120000 : 0) + (hasLightning ? 60000 : 0)
-  const total = Math.round((base * areaCoeff * voltCoeff + extras) / 10000) * 10000
-  const days = Math.round(20 + (area / 5000) * 10 + (hasArchlight ? 10 : 0) + (voltages.length > 1 ? 10 : 0))
+  const total = Math.round((base * areaCoeff * voltCoeff * marksCoeff + extras + lineCoeff) / 10000) * 10000
+  const days = Math.round(20 + (area / 5000) * 10 + (hasArchlight ? 10 : 0) + (voltages.length > 1 ? 10 : 0) + (selectedMarks.length - 1) * 5 + lineLength * 0.5)
 
   return (
     <section id="calculator" className="bg-white py-20 border-b border-slate-200">
@@ -350,6 +554,7 @@ function Calculator() {
         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-10">Калькулятор проекта</h2>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
+
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Тип объекта</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -368,6 +573,31 @@ function Calculator() {
                 ))}
               </div>
             </div>
+
+            <div>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Разделы проекта (марки РД / ИОС 5.1)</p>
+              <p className="text-xs text-slate-400 mb-3">Выберите нужные марки документации — можно несколько</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {PROJECT_MARKS.map(m => (
+                  <button
+                    key={m.id}
+                    onClick={() => toggleMark(m.id)}
+                    className={`px-4 py-3 text-sm text-left border transition-colors ${
+                      selectedMarks.includes(m.id)
+                        ? 'border-emerald-600 bg-emerald-50'
+                        : 'border-slate-200 text-slate-600 hover:border-slate-400'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className={`font-mono font-bold text-xs px-1.5 py-0.5 ${selectedMarks.includes(m.id) ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-500'}`}>{m.code}</span>
+                      <span className={`text-sm ${selectedMarks.includes(m.id) ? 'font-semibold text-emerald-800' : ''}`}>{m.label}</span>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-0.5">{m.desc}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">
                 Площадь объекта: <span className="text-slate-900 font-bold">{area.toLocaleString('ru')} м²</span>
@@ -393,10 +623,11 @@ function Calculator() {
                 <span>100 м²</span><span>50 000 м²</span>
               </div>
             </div>
+
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Класс напряжения</p>
-              <p className="text-xs text-slate-400 mb-3">Можно выбрать несколько (например, РУ-10 кВ и РУ-0,4 кВ одновременно)</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <p className="text-xs text-slate-400 mb-3">Можно выбрать оба (РУ-10 кВ + РУ-0,4 кВ одновременно)</p>
+              <div className="grid grid-cols-2 gap-2">
                 {VOLTAGE_OPTIONS.map(({ v, l }) => (
                   <button
                     key={v}
@@ -412,10 +643,58 @@ function Calculator() {
                   </button>
                 ))}
               </div>
-              {voltages.length > 1 && (
-                <p className="text-xs text-emerald-600 mt-2 font-mono">Выбрано: {voltages.map(v => VOLTAGE_OPTIONS.find(o => o.v === v)?.l).join(' + ')}</p>
+              <div className="mt-2 border border-slate-200 bg-slate-50 px-4 py-2.5 flex items-center gap-3">
+                <Icon name="Info" size={14} className="text-slate-400 shrink-0" />
+                <p className="text-xs text-slate-500">Объекты 35 кВ и 110 кВ рассчитываются индивидуально —{' '}
+                  <button onClick={() => scrollTo('contacts')} className="text-emerald-600 hover:underline">оставьте заявку</button>
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Воздушные / кабельные линии (ВЛ / КЛ)</p>
+              <p className="text-xs text-slate-400 mb-3">Укажите тип и длину, если в проект входит прокладка линий</p>
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {[
+                  { v: 'none', l: 'Не требуется' },
+                  { v: 'KL', l: 'Кабельная (КЛ)' },
+                  { v: 'VL', l: 'Воздушная (ВЛ)' },
+                ].map(({ v, l }) => (
+                  <button
+                    key={v}
+                    onClick={() => setLineType(v as 'none' | 'KL' | 'VL')}
+                    className={`py-3 text-sm border transition-colors ${
+                      lineType === v
+                        ? 'border-emerald-600 bg-emerald-50 text-emerald-800 font-semibold'
+                        : 'border-slate-200 text-slate-600 hover:border-slate-400'
+                    }`}
+                  >
+                    {l}
+                  </button>
+                ))}
+              </div>
+              {lineType !== 'none' && (
+                <div className="flex items-center gap-3">
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={lineLengthInput}
+                    onChange={e => handleLineLengthInput(e.target.value)}
+                    className="w-28 border border-slate-300 focus:border-emerald-500 focus:outline-none px-3 py-2 text-sm text-slate-900 font-mono"
+                    placeholder="0"
+                  />
+                  <span className="text-slate-400 text-sm shrink-0">км</span>
+                  <input
+                    type="range" min={0} max={50} step={0.5}
+                    value={lineLength}
+                    onChange={e => { setLineLength(Number(e.target.value)); setLineLengthInput(String(e.target.value)) }}
+                    className="flex-1 accent-emerald-600 h-1.5"
+                  />
+                  <span className="text-xs text-slate-400 shrink-0">50 км</span>
+                </div>
               )}
             </div>
+
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Дополнительные разделы</p>
               <div className="space-y-2">
@@ -439,6 +718,7 @@ function Calculator() {
                 ))}
               </div>
             </div>
+
           </div>
           <div className="lg:col-span-1">
             <div className="bg-slate-900 p-6 sticky top-20">
@@ -455,9 +735,19 @@ function Calculator() {
                   <span className="text-white font-mono">{days} раб. дней</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-slate-400">Состав</span>
-                  <span className="text-white text-xs">ПД + РД</span>
+                  <span className="text-slate-400">Марки РД</span>
+                  <span className="text-white text-xs font-mono">{selectedMarks.map(id => PROJECT_MARKS.find(m => m.id === id)?.code).join(', ')}</span>
                 </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-400">Напряжение</span>
+                  <span className="text-white text-xs font-mono">{voltages.map(v => VOLTAGE_OPTIONS.find(o => o.v === v)?.l).join(' + ')}</span>
+                </div>
+                {lineType !== 'none' && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-slate-400">{lineType === 'KL' ? 'КЛ' : 'ВЛ'}</span>
+                    <span className="text-white font-mono text-xs">{lineLength} км</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-sm">
                   <span className="text-slate-400">Нормативная база</span>
                   <span className="text-white text-xs">ГОСТ Р 21.101-2026</span>
@@ -480,30 +770,30 @@ function Normative() {
     <section id="normative" className="bg-slate-50 py-20 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-6">
         <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">Нормативная база</p>
-        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Документы, по которым работаем</h2>
-        <p className="text-slate-500 mb-10 max-w-2xl">Вся документация разрабатывается строго в соответствии с действующими нормативными документами. Ниже — перечень основных стандартов и сводов правил.</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Используемая нормативная документация</h2>
+        <p className="text-slate-500 mb-10 max-w-2xl">Вся документация разрабатывается строго в соответствии с действующими нормативными документами.</p>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm border-collapse">
+          <table className="w-full border-collapse">
             <thead>
               <tr className="bg-slate-900 text-white">
-                <th className="text-left px-4 py-3 font-mono text-xs tracking-wider w-64">Обозначение</th>
-                <th className="text-left px-4 py-3 font-mono text-xs tracking-wider">Наименование</th>
-                <th className="text-left px-4 py-3 font-mono text-xs tracking-wider w-48 hidden sm:table-cell">Область применения</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold w-64">Обозначение</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold">Наименование</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold w-48 hidden sm:table-cell">Область применения</th>
               </tr>
             </thead>
             <tbody>
               {NORMATIVE_DOCS.map((doc, i) => (
                 <motion.tr
                   key={doc.code}
-                  className={`border-b border-slate-200 hover:bg-white transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}
+                  className={`border-b border-slate-200 hover:bg-emerald-50/30 transition-colors ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: i * 0.03 }}
                 >
-                  <td className="px-4 py-3 font-mono text-xs text-emerald-700 font-semibold align-top">{doc.code}</td>
-                  <td className="px-4 py-3 text-slate-700 align-top">{doc.title}</td>
-                  <td className="px-4 py-3 text-slate-400 text-xs align-top hidden sm:table-cell">{doc.scope}</td>
+                  <td className="px-4 py-3 text-sm text-emerald-700 font-semibold align-top">{doc.code}</td>
+                  <td className="px-4 py-3 text-sm text-slate-700 align-top">{doc.title}</td>
+                  <td className="px-4 py-3 text-sm text-slate-500 align-top hidden sm:table-cell">{doc.scope}</td>
                 </motion.tr>
               ))}
             </tbody>
@@ -523,7 +813,7 @@ function About() {
             <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">О компании</p>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Проектируем с 2010 года</h2>
             <p className="text-slate-600 leading-relaxed mb-5">
-              Специализируемся на проектировании систем электроснабжения, освещения, молниезащиты и архитектурной подсветки для производственных, промышленных, складских и коммерческих объектов. Разработка проекта для систем электрики — наш профиль с первого дня.
+              Специализируемся на проектировании систем электроснабжения, освещения, молниезащиты и архитектурной подсветки для производственных, промышленных, складских и коммерческих объектов.
             </p>
             <p className="text-slate-600 leading-relaxed mb-8">
               Нас 9 человек — небольшая, но слаженная команда с глубокой экспертизой. Документация выпускается строго по ГОСТ Р 21.101-2026. Работаем по всей России.
@@ -532,7 +822,7 @@ function About() {
               {[
                 'Допуск СРО к проектированию',
                 'ГОСТ Р 21.101-2026 — актуальный стандарт на проектную документацию',
-                'Официальный партнёр IEK, EKF, Sistemf Electric, Chint, КЭАЗ',
+                'Официальный партнёр IEK, EKF, Systeme Electric, Chint, КЭАЗ',
                 'Опыт более 15 лет, 200+ реализованных объектов',
                 'Бесплатная экспертиза вашей проектной документации',
               ].map(f => (
@@ -626,7 +916,7 @@ function Contacts() {
             <p className="text-slate-400 leading-relaxed mb-10">Отправьте заявку — инженер свяжется с вами в течение одного рабочего дня.</p>
             <div className="space-y-5">
               {[
-                { icon: 'Phone', label: 'Телефон', val: '+7 978 220-33-80' },
+                { icon: 'Phone', label: 'Телефон', val: '+7 978 220-3-380' },
                 { icon: 'Mail', label: 'Email', val: 'info@etmpro.ru' },
                 { icon: 'MapPin', label: 'Адрес', val: 'Москва, ул. Промышленная, 12, офис 301' },
                 { icon: 'Clock', label: 'График', val: 'Пн–Пт, 9:00–18:00 (МСК)' },
@@ -753,7 +1043,7 @@ function Footer() {
           </div>
           <span className="text-slate-400 text-sm">ЭТМПРО © 2025</span>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 flex-wrap justify-center">
           {NAV_LINKS.map(l => (
             <a key={l.href} href={l.href} className="text-slate-500 hover:text-slate-300 text-xs transition-colors">{l.label}</a>
           ))}
@@ -771,6 +1061,7 @@ export default function LandingPage() {
       <Hero />
       <Services />
       <Projects />
+      <Samples />
       <Calculator />
       <About />
       <Normative />
