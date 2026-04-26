@@ -1,9 +1,6 @@
 """
-Бэкенд-функция для отправки заявки с сайта на email через Resend API.
-
-Принимает POST-запрос с данными формы (имя, контакт, объект, описание, файлы),
-формирует HTML-письмо и отправляет его на elco72@mail.ru через Resend API
-(без использования pip-пакета resend, только стандартная библиотека urllib.request).
+Бэкенд-функция для отправки заявки с сайта.
+Отправляет уведомление в Telegram-бот (надёжно, без верификации домена).
 """
 
 import json
@@ -14,21 +11,7 @@ import urllib.error
 
 def handler(event: dict, context) -> dict:
     """
-    Обработчик входящих HTTP-запросов.
-
-    Поддерживает:
-    - OPTIONS — CORS preflight
-    - POST — приём и отправка заявки на email
-
-    Параметры запроса (JSON body):
-        name        (str)       — имя заявителя
-        contact     (str)       — контакт (телефон или email)
-        object_name (str)       — название объекта
-        description (str)       — описание заявки
-        files       (list[dict])— прикреплённые файлы [{name, content (base64), size}]
-
-    Возвращает:
-        dict — {"ok": true} при успехе, {"error": "..."} при ошибке
+    Принимает POST с данными формы и отправляет уведомление в Telegram.
     """
 
     cors_headers = {
@@ -38,15 +21,9 @@ def handler(event: dict, context) -> dict:
         "Content-Type": "application/json",
     }
 
-    # Обработка CORS preflight
-    if event.get("httpMethod") == "OPTIONS" or event.get("requestContext", {}).get("http", {}).get("method") == "OPTIONS":
-        return {
-            "statusCode": 200,
-            "headers": cors_headers,
-            "body": json.dumps({"ok": True}),
-        }
+    if event.get("httpMethod") == "OPTIONS":
+        return {"statusCode": 200, "headers": cors_headers, "body": ""}
 
-    # Разбор тела запроса
     try:
         body_raw = event.get("body") or "{}"
         if event.get("isBase64Encoded"):
@@ -54,138 +31,73 @@ def handler(event: dict, context) -> dict:
             body_raw = base64.b64decode(body_raw).decode("utf-8")
         body = json.loads(body_raw)
     except Exception as e:
-        return {
-            "statusCode": 400,
-            "headers": cors_headers,
-            "body": json.dumps({"error": f"Не удалось разобрать тело запроса: {str(e)}"}),
-        }
+        return {"statusCode": 400, "headers": cors_headers, "body": json.dumps({"error": str(e)})}
 
-    name = body.get("name", "")
-    contact = body.get("contact", "")
-    object_name = body.get("object_name", "")
-    description = body.get("description", "")
+    name = body.get("name", "—")
+    contact = body.get("contact", "—")
+    object_name = body.get("object_name", "—")
+    description = body.get("description", "—")
     files = body.get("files", [])
 
-    # Формирование списка прикреплённых файлов (только имена и размеры)
+    files_text = ""
     if files:
-        files_rows = "".join(
-            f"<tr>"
-            f"<td style='padding:4px 8px;border:1px solid #ddd;'>{i + 1}</td>"
-            f"<td style='padding:4px 8px;border:1px solid #ddd;'>{f.get('name', '—')}</td>"
-            f"<td style='padding:4px 8px;border:1px solid #ddd;'>{_format_size(f.get('size', 0))}</td>"
-            f"</tr>"
-            for i, f in enumerate(files)
-        )
-        files_section = f"""
-        <h3 style="color:#555;margin-top:24px;">Прикреплённые файлы ({len(files)} шт.)</h3>
-        <table style="border-collapse:collapse;width:100%;font-size:14px;">
-            <thead>
-                <tr style="background:#f0f0f0;">
-                    <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">#</th>
-                    <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">Имя файла</th>
-                    <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">Размер</th>
-                </tr>
-            </thead>
-            <tbody>{files_rows}</tbody>
-        </table>
-        """
-    else:
-        files_section = "<p style='color:#888;'>Файлы не прикреплены.</p>"
+        files_list = "\n".join(f"  • {f.get('name', '?')} ({_format_size(f.get('size', 0))})" for f in files)
+        files_text = f"\n\n📎 <b>Файлы ({len(files)} шт.):</b>\n{files_list}"
 
-    html_body = f"""
-    <!DOCTYPE html>
-    <html lang="ru">
-    <head><meta charset="UTF-8"><title>Новая заявка</title></head>
-    <body style="font-family:Arial,sans-serif;color:#333;max-width:640px;margin:0 auto;padding:24px;">
-        <h2 style="color:#222;border-bottom:2px solid #e0e0e0;padding-bottom:8px;">Новая заявка с сайта</h2>
-        <table style="width:100%;border-collapse:collapse;font-size:15px;">
-            <tr>
-                <td style="padding:8px 12px;background:#f7f7f7;font-weight:bold;width:35%;border:1px solid #ddd;">Имя</td>
-                <td style="padding:8px 12px;border:1px solid #ddd;">{_escape(name)}</td>
-            </tr>
-            <tr>
-                <td style="padding:8px 12px;background:#f7f7f7;font-weight:bold;border:1px solid #ddd;">Контакт</td>
-                <td style="padding:8px 12px;border:1px solid #ddd;">{_escape(contact)}</td>
-            </tr>
-            <tr>
-                <td style="padding:8px 12px;background:#f7f7f7;font-weight:bold;border:1px solid #ddd;">Объект</td>
-                <td style="padding:8px 12px;border:1px solid #ddd;">{_escape(object_name)}</td>
-            </tr>
-            <tr>
-                <td style="padding:8px 12px;background:#f7f7f7;font-weight:bold;border:1px solid #ddd;">Описание</td>
-                <td style="padding:8px 12px;border:1px solid #ddd;white-space:pre-wrap;">{_escape(description)}</td>
-            </tr>
-        </table>
-        {files_section}
-        <p style="margin-top:32px;font-size:12px;color:#aaa;">Письмо сформировано автоматически — не отвечайте на него.</p>
-    </body>
-    </html>
-    """
+    message = (
+        f"🔔 <b>Новая заявка — ЭТМПРО / eoes.ru</b>\n\n"
+        f"👤 <b>Имя:</b> {_esc(name)}\n"
+        f"📞 <b>Контакт:</b> {_esc(contact)}\n"
+        f"🏭 <b>Объект:</b> {_esc(object_name)}\n"
+        f"📝 <b>Описание:</b> {_esc(description)}"
+        f"{files_text}"
+    )
 
-    # Отправка через Resend API
-    api_key = os.environ.get("RESEND_API_KEY", "")
-    to_email = os.environ.get("NOTIFY_EMAIL", "info@eoes.ru")
+    bot_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+
+    if not bot_token or not chat_id:
+        print(f"[ERROR] Telegram secrets missing. BOT_TOKEN set: {bool(bot_token)}, CHAT_ID set: {bool(chat_id)}")
+        return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": "Telegram not configured"})}
+
+    tg_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
     payload = json.dumps({
-        "from": "onboarding@resend.dev",
-        "to": [to_email],
-        "reply_to": contact if contact else None,
-        "subject": f"Новая заявка с сайта ЭТМПРО | eoes.ru: {object_name or name}",
-        "html": html_body,
+        "chat_id": chat_id,
+        "text": message,
+        "parse_mode": "HTML",
     }).encode("utf-8")
 
     req = urllib.request.Request(
-        url="https://api.resend.com/emails",
+        url=tg_url,
         data=payload,
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        },
+        headers={"Content-Type": "application/json"},
         method="POST",
     )
 
     try:
-        with urllib.request.urlopen(req) as resp:
-            resp.read()
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            result = json.loads(resp.read())
+            if not result.get("ok"):
+                print(f"[ERROR] Telegram API error: {result}")
+                return {"statusCode": 502, "headers": cors_headers, "body": json.dumps({"error": "Telegram error", "detail": result})}
     except urllib.error.HTTPError as e:
-        error_body = e.read().decode("utf-8", errors="replace")
-        return {
-            "statusCode": 502,
-            "headers": cors_headers,
-            "body": json.dumps({"error": f"Resend API вернул ошибку {e.code}: {error_body}"}),
-        }
+        err = e.read().decode("utf-8", errors="replace")
+        print(f"[ERROR] Telegram HTTP {e.code}: {err}")
+        return {"statusCode": 502, "headers": cors_headers, "body": json.dumps({"error": f"Telegram {e.code}: {err}"})}
     except Exception as e:
-        return {
-            "statusCode": 502,
-            "headers": cors_headers,
-            "body": json.dumps({"error": f"Ошибка при обращении к Resend API: {str(e)}"}),
-        }
+        print(f"[ERROR] Telegram request failed: {e}")
+        return {"statusCode": 502, "headers": cors_headers, "body": json.dumps({"error": str(e)})}
 
-    return {
-        "statusCode": 200,
-        "headers": cors_headers,
-        "body": json.dumps({"ok": True}),
-    }
+    return {"statusCode": 200, "headers": cors_headers, "body": json.dumps({"ok": True})}
 
 
-def _escape(text: str) -> str:
-    """Экранирует спецсимволы HTML в строке."""
-    return (
-        str(text)
-        .replace("&", "&amp;")
-        .replace("<", "&lt;")
-        .replace(">", "&gt;")
-        .replace('"', "&quot;")
-        .replace("'", "&#39;")
-    )
+def _esc(text: str) -> str:
+    return str(text).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
 def _format_size(size_bytes: int) -> str:
-    """Форматирует размер файла в читаемый вид (Б, КБ, МБ)."""
     if size_bytes < 1024:
         return f"{size_bytes} Б"
     elif size_bytes < 1024 * 1024:
         return f"{size_bytes / 1024:.1f} КБ"
-    else:
-        return f"{size_bytes / (1024 * 1024):.1f} МБ"
-# v3
-# v2
+    return f"{size_bytes / (1024 * 1024):.1f} МБ"
