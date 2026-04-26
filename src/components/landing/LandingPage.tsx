@@ -78,14 +78,14 @@ const SERVICES = [
 ]
 
 const PROJECTS = [
-  { num: 218, title: 'КТП 10/0,4 кВ промышленного предприятия', voltage: '10 кВ', year: '2024', area: '—', desc: 'КТП наружной установки, РУ-10 кВ, РУ-0,4 кВ, учёт электроэнергии, ввод в работу' },
-  { num: 219, title: 'Архитектурная подсветка фасадов 3-х 25-этажных домов в ЖК', voltage: '0,4 кВ', year: '2024', area: '—', desc: 'Концепция и РД декоративной подсветки фасадов, управление сценариями, согласование с архитектором' },
-  { num: 220, title: 'Автосервис / автомойка', voltage: '0,4 кВ', year: '2025', area: '3 200 м²', desc: 'Силовое электроснабжение, освещение рабочих зон, наружное освещение территории' },
-  { num: 221, title: 'Складской комплекс (логистика)', voltage: '10 кВ', year: '2025', area: '41 000 м²', desc: 'Наружные сети 10 кВ, ТП, внутреннее освещение, молниезащита и заземление' },
-  { num: 222, title: 'Торговый центр', voltage: '10 кВ', year: '2025', area: '22 000 м²', desc: 'Электроснабжение, внутреннее и наружное освещение, архитектурная подсветка фасада, молниезащита' },
-  { num: 223, title: 'Завод тяжёлой промышленности', voltage: '10 кВ', year: '2025', area: '58 000 м²', desc: 'Электроснабжение цехов, ТП, ВЛ-10 кВ, АСУ ТП, силовое оборудование тяжёлых станков, молниезащита, заземление' },
-  { num: 224, title: 'Промышленное предприятие (металлообработка)', voltage: '10 кВ', year: '2026', area: '32 000 м²', desc: 'Электроснабжение, АСУ ТП, РУ-10 кВ, РУ-0,4 кВ, молниезащита, заземление' },
-  { num: 225, title: 'Производственный корпус (завод)', voltage: '10 кВ', year: '2026', area: '18 500 м²', desc: 'ТП 10/0,4 кВ, силовое электроснабжение цехов, наружные кабельные сети, освещение' },
+  { num: 214, title: 'КТП 10/0,4 кВ промышленного предприятия', voltage: '10 кВ', year: '2024', area: '—', desc: 'КТП наружной установки, РУ-10 кВ, РУ-0,4 кВ, учёт электроэнергии, ввод в работу' },
+  { num: 215, title: 'Архитектурная подсветка фасадов 3-х 25-этажных домов в ЖК', voltage: '0,4 кВ', year: '2024', area: '—', desc: 'Концепция и РД декоративной подсветки фасадов, управление сценариями, согласование с архитектором' },
+  { num: 216, title: 'Автосервис / автомойка', voltage: '0,4 кВ', year: '2025', area: '3 200 м²', desc: 'Силовое электроснабжение, освещение рабочих зон, наружное освещение территории' },
+  { num: 217, title: 'Складской комплекс (логистика)', voltage: '10 кВ', year: '2025', area: '41 000 м²', desc: 'Наружные сети 10 кВ, ТП, внутреннее освещение, молниезащита и заземление' },
+  { num: 218, title: 'Торговый центр', voltage: '10 кВ', year: '2025', area: '22 000 м²', desc: 'Электроснабжение, внутреннее и наружное освещение, архитектурная подсветка фасада, молниезащита' },
+  { num: 219, title: 'Завод тяжёлой промышленности', voltage: '10 кВ', year: '2025', area: '58 000 м²', desc: 'Электроснабжение цехов, ТП, ВЛ-10 кВ, АСУ ТП, силовое оборудование тяжёлых станков, молниезащита, заземление' },
+  { num: 220, title: 'Промышленное предприятие (металлообработка)', voltage: '10 кВ', year: '2026', area: '32 000 м²', desc: 'Электроснабжение, АСУ ТП, РУ-10 кВ, РУ-0,4 кВ, молниезащита, заземление' },
+  { num: 221, title: 'Производственный корпус (завод)', voltage: '10 кВ', year: '2026', area: '18 500 м²', desc: 'ТП 10/0,4 кВ, силовое электроснабжение цехов, наружные кабельные сети, освещение' },
 ]
 
 const SAMPLES = [
@@ -345,10 +345,26 @@ function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-transparent to-slate-900/80 pointer-events-none" />
       <div className="relative max-w-7xl mx-auto px-6 py-24 md:py-32">
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-          <span className="inline-flex items-center gap-2 bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono tracking-widest uppercase px-3 py-1.5 mb-6">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            ЭОЭС · Электроснабжение и освещение
-          </span>
+          <div className="flex flex-wrap gap-2 mb-6">
+            {[
+              { code: 'ЭП', label: 'Электроснабжение (ПД / ИОС 5.1)' },
+              { code: 'ЭС', label: 'Силовое электрооборудование' },
+              { code: 'ЭО', label: 'Внутреннее освещение' },
+              { code: 'ЭН', label: 'Наружные сети' },
+              { code: 'ЭМ', label: 'Электрооборудование механизмов' },
+              { code: 'ЭГ', label: 'Заземление и молниезащита' },
+              { code: 'ЭЭ', label: 'АСКУЭ / учёт электроэнергии' },
+              { code: 'ДГУ', label: 'Дизель-генераторы и ИБП' },
+              { code: 'ПД', label: 'Проектная документация' },
+              { code: 'ИОС 5.1', label: 'Инженерные системы' },
+            ].map(({ code, label }) => (
+              <span key={code} className="inline-flex items-center gap-1.5 bg-emerald-600/15 border border-emerald-500/25 text-emerald-400 text-xs font-mono px-2.5 py-1">
+                <span className="font-bold text-emerald-300">{code}</span>
+                <span className="text-emerald-500/80 hidden sm:inline">—</span>
+                <span className="text-emerald-400/70 hidden sm:inline">{label}</span>
+              </span>
+            ))}
+          </div>
           <h1 className="text-4xl md:text-6xl font-bold text-white leading-[1.1] max-w-3xl mb-4">
             Проектирование систем электроснабжения и автоматизации
           </h1>
@@ -542,7 +558,7 @@ function Calculator() {
   const lineCoeff = lineType !== 'none' ? lineLength * (lineType === 'KL' ? 35000 : 20000) : 0
   const marksCoeff = 1 + (selectedMarks.length - 1) * 0.18
   const extras = (hasEE ? 70000 : 0) + (hasDGU ? 90000 : 0) + (hasArchlight ? 120000 : 0)
-  const total = Math.round((base * areaCoeff * voltCoeff * marksCoeff + extras + lineCoeff) / 10000) * 10000
+  const total = Math.round((base * areaCoeff * voltCoeff * marksCoeff + extras + lineCoeff) * 0.8 / 10000) * 10000
   const days = Math.round(20 + (area / 5000) * 10 + (hasArchlight ? 10 : 0) + (voltages.length > 1 ? 10 : 0) + (selectedMarks.length - 1) * 5 + lineLength * 0.5)
 
   const formatPrice = (val: number) => {
