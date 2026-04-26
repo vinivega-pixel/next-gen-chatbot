@@ -1,6 +1,5 @@
 """
-Бэкенд-функция для отправки заявки с сайта.
-Отправляет уведомление в Telegram-бот (надёжно, без верификации домена).
+Бэкенд-функция для отправки заявки с сайта на email через Resend API.
 """
 
 import json
@@ -11,7 +10,7 @@ import urllib.error
 
 def handler(event: dict, context) -> dict:
     """
-    Принимает POST с данными формы и отправляет уведомление в Telegram.
+    Принимает POST с данными формы и отправляет письмо через Resend.
     """
 
     cors_headers = {
@@ -39,53 +38,82 @@ def handler(event: dict, context) -> dict:
     description = body.get("description", "—")
     files = body.get("files", [])
 
-    files_text = ""
     if files:
-        files_list = "\n".join(f"  • {f.get('name', '?')} ({_format_size(f.get('size', 0))})" for f in files)
-        files_text = f"\n\n📎 <b>Файлы ({len(files)} шт.):</b>\n{files_list}"
+        files_rows = "".join(
+            f"<tr><td style='padding:4px 8px;border:1px solid #ddd;'>{i+1}</td>"
+            f"<td style='padding:4px 8px;border:1px solid #ddd;'>{f.get('name','—')}</td>"
+            f"<td style='padding:4px 8px;border:1px solid #ddd;'>{_format_size(f.get('size',0))}</td></tr>"
+            for i, f in enumerate(files)
+        )
+        files_section = f"""
+        <h3 style="color:#555;margin-top:24px;">Прикреплённые файлы ({len(files)} шт.)</h3>
+        <table style="border-collapse:collapse;width:100%;font-size:14px;">
+            <thead><tr style="background:#f0f0f0;">
+                <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">#</th>
+                <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">Имя файла</th>
+                <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">Размер</th>
+            </tr></thead>
+            <tbody>{files_rows}</tbody>
+        </table>"""
+    else:
+        files_section = "<p style='color:#888;'>Файлы не прикреплены.</p>"
 
-    message = (
-        f"🔔 <b>Новая заявка — ЭТМПРО / eoes.ru</b>\n\n"
-        f"👤 <b>Имя:</b> {_esc(name)}\n"
-        f"📞 <b>Контакт:</b> {_esc(contact)}\n"
-        f"🏭 <b>Объект:</b> {_esc(object_name)}\n"
-        f"📝 <b>Описание:</b> {_esc(description)}"
-        f"{files_text}"
-    )
+    html_body = f"""<!DOCTYPE html>
+<html lang="ru">
+<head><meta charset="UTF-8"><title>Новая заявка</title></head>
+<body style="font-family:Arial,sans-serif;color:#333;max-width:640px;margin:0 auto;padding:24px;">
+    <h2 style="color:#222;border-bottom:2px solid #e0e0e0;padding-bottom:8px;">Новая заявка с сайта eoes.ru</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:15px;">
+        <tr>
+            <td style="padding:8px 12px;background:#f7f7f7;font-weight:bold;width:35%;border:1px solid #ddd;">Имя</td>
+            <td style="padding:8px 12px;border:1px solid #ddd;">{_esc(name)}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 12px;background:#f7f7f7;font-weight:bold;border:1px solid #ddd;">Контакт</td>
+            <td style="padding:8px 12px;border:1px solid #ddd;">{_esc(contact)}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 12px;background:#f7f7f7;font-weight:bold;border:1px solid #ddd;">Объект</td>
+            <td style="padding:8px 12px;border:1px solid #ddd;">{_esc(object_name)}</td>
+        </tr>
+        <tr>
+            <td style="padding:8px 12px;background:#f7f7f7;font-weight:bold;border:1px solid #ddd;">Описание</td>
+            <td style="padding:8px 12px;border:1px solid #ddd;white-space:pre-wrap;">{_esc(description)}</td>
+        </tr>
+    </table>
+    {files_section}
+    <p style="margin-top:32px;font-size:12px;color:#aaa;">Письмо сформировано автоматически — не отвечайте на него.</p>
+</body>
+</html>"""
 
-    bot_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-
-    if not bot_token or not chat_id:
-        print(f"[ERROR] Telegram secrets missing. BOT_TOKEN set: {bool(bot_token)}, CHAT_ID set: {bool(chat_id)}")
-        return {"statusCode": 500, "headers": cors_headers, "body": json.dumps({"error": "Telegram not configured"})}
-
-    tg_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    api_key = os.environ.get("RESEND_API_KEY", "")
     payload = json.dumps({
-        "chat_id": chat_id,
-        "text": message,
-        "parse_mode": "HTML",
+        "from": "noreply@eoes.ru",
+        "to": ["info@eoes.ru"],
+        "reply_to": contact if "@" in str(contact) else None,
+        "subject": f"Новая заявка с сайта ЭТМПРО | {object_name or name}",
+        "html": html_body,
     }).encode("utf-8")
 
     req = urllib.request.Request(
-        url=tg_url,
+        url="https://api.resend.com/emails",
         data=payload,
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
         method="POST",
     )
 
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
-            result = json.loads(resp.read())
-            if not result.get("ok"):
-                print(f"[ERROR] Telegram API error: {result}")
-                return {"statusCode": 502, "headers": cors_headers, "body": json.dumps({"error": "Telegram error", "detail": result})}
+            resp.read()
     except urllib.error.HTTPError as e:
-        err = e.read().decode("utf-8", errors="replace")
-        print(f"[ERROR] Telegram HTTP {e.code}: {err}")
-        return {"statusCode": 502, "headers": cors_headers, "body": json.dumps({"error": f"Telegram {e.code}: {err}"})}
+        error_body = e.read().decode("utf-8", errors="replace")
+        print(f"[ERROR] Resend {e.code}: {error_body}")
+        return {"statusCode": 502, "headers": cors_headers, "body": json.dumps({"error": f"Resend {e.code}: {error_body}"})}
     except Exception as e:
-        print(f"[ERROR] Telegram request failed: {e}")
+        print(f"[ERROR] {e}")
         return {"statusCode": 502, "headers": cors_headers, "body": json.dumps({"error": str(e)})}
 
     return {"statusCode": 200, "headers": cors_headers, "body": json.dumps({"ok": True})}
