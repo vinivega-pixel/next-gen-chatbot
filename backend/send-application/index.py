@@ -87,6 +87,7 @@ def handler(event: dict, context) -> dict:
 </html>"""
 
     api_key = os.environ.get("RESEND_API_KEY", "")
+    print(f"[DEBUG] RESEND_API_KEY length: {len(api_key)}, starts with: {api_key[:8] if api_key else 'EMPTY'}")
     payload = json.dumps({
         "from": "noreply@eoes.ru",
         "to": ["info@eoes.ru"],
