@@ -124,12 +124,12 @@ def handler(event: dict, context) -> dict:
 
     # Отправка через Resend API
     api_key = os.environ.get("RESEND_API_KEY", "")
-    to_email = os.environ.get("NOTIFY_EMAIL", "elco72@mail.ru")
+    to_email = os.environ.get("NOTIFY_EMAIL", "info@eoes.ru")
     payload = json.dumps({
         "from": "onboarding@resend.dev",
         "to": [to_email],
         "reply_to": contact if contact else None,
-        "subject": f"Новая заявка с сайта ЭТМПРО: {object_name or name}",
+        "subject": f"Новая заявка с сайта ЭТМПРО | eoes.ru: {object_name or name}",
         "html": html_body,
     }).encode("utf-8")
 

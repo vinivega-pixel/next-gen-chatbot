@@ -8,7 +8,6 @@ const SEND_URL = 'https://functions.poehali.dev/f89ef799-3a54-43fb-acc7-b79212ae
 const NAV_LINKS = [
   { label: 'Услуги', href: '#services' },
   { label: 'Проекты', href: '#projects' },
-  { label: 'Образцы', href: '#samples' },
   { label: 'Калькулятор', href: '#calculator' },
   { label: 'О компании', href: '#about' },
   { label: 'Нормативы', href: '#normative' },
@@ -79,14 +78,14 @@ const SERVICES = [
 ]
 
 const PROJECTS = [
-  { title: 'Производственный корпус (завод)', voltage: '10 кВ', year: '2024', area: '18 500 м²', desc: 'ТП 10/0,4 кВ, силовое электроснабжение цехов, наружные кабельные сети, освещение' },
-  { title: 'Промышленное предприятие (металлообработка)', voltage: '10 кВ', year: '2024', area: '32 000 м²', desc: 'Электроснабжение, АСУ ТП, РУ-10 кВ, РУ-0,4 кВ, молниезащита, заземление' },
-  { title: 'Подстанция 110/10 кВ', voltage: '110 кВ', year: '2023', area: '—', desc: 'Проектирование подстанции: ОРУ-110 кВ, КРУ-10 кВ, РЗА, СОПТ, оперативные схемы' },
-  { title: 'КТП 10/0,4 кВ промышленного предприятия', voltage: '10 кВ', year: '2024', area: '—', desc: 'КТП наружной установки, РУ-10 кВ, РУ-0,4 кВ, учёт электроэнергии, ввод в работу' },
-  { title: 'Пищевое производство', voltage: '0,4 кВ', year: '2023', area: '6 700 м²', desc: 'Силовое электроснабжение линий, освещение чистых помещений, заземление оборудования' },
-  { title: 'Складской комплекс (логистика)', voltage: '10 кВ', year: '2023', area: '41 000 м²', desc: 'Наружные сети 10 кВ, ТП, внутреннее освещение, молниезащита и заземление' },
-  { title: 'Автосервис / автомойка', voltage: '0,4 кВ', year: '2023', area: '3 200 м²', desc: 'Силовое электроснабжение, освещение рабочих зон, наружное освещение территории' },
-  { title: 'Торговый центр', voltage: '10 кВ', year: '2024', area: '22 000 м²', desc: 'Электроснабжение, внутреннее и наружное освещение, архитектурная подсветка фасада, молниезащита' },
+  { num: 218, title: 'КТП 10/0,4 кВ промышленного предприятия', voltage: '10 кВ', year: '2024', area: '—', desc: 'КТП наружной установки, РУ-10 кВ, РУ-0,4 кВ, учёт электроэнергии, ввод в работу' },
+  { num: 219, title: 'Архитектурная подсветка фасадов 3-х 25-этажных домов в ЖК', voltage: '0,4 кВ', year: '2024', area: '—', desc: 'Концепция и РД декоративной подсветки фасадов, управление сценариями, согласование с архитектором' },
+  { num: 220, title: 'Автосервис / автомойка', voltage: '0,4 кВ', year: '2025', area: '3 200 м²', desc: 'Силовое электроснабжение, освещение рабочих зон, наружное освещение территории' },
+  { num: 221, title: 'Складской комплекс (логистика)', voltage: '10 кВ', year: '2025', area: '41 000 м²', desc: 'Наружные сети 10 кВ, ТП, внутреннее освещение, молниезащита и заземление' },
+  { num: 222, title: 'Торговый центр', voltage: '10 кВ', year: '2025', area: '22 000 м²', desc: 'Электроснабжение, внутреннее и наружное освещение, архитектурная подсветка фасада, молниезащита' },
+  { num: 223, title: 'Завод тяжёлой промышленности', voltage: '10 кВ', year: '2025', area: '58 000 м²', desc: 'Электроснабжение цехов, ТП, ВЛ-10 кВ, АСУ ТП, силовое оборудование тяжёлых станков, молниезащита, заземление' },
+  { num: 224, title: 'Промышленное предприятие (металлообработка)', voltage: '10 кВ', year: '2026', area: '32 000 м²', desc: 'Электроснабжение, АСУ ТП, РУ-10 кВ, РУ-0,4 кВ, молниезащита, заземление' },
+  { num: 225, title: 'Производственный корпус (завод)', voltage: '10 кВ', year: '2026', area: '18 500 м²', desc: 'ТП 10/0,4 кВ, силовое электроснабжение цехов, наружные кабельные сети, освещение' },
 ]
 
 const SAMPLES = [
@@ -166,14 +165,12 @@ const VOLTAGE_OPTIONS = [
 ]
 
 const PROJECT_MARKS = [
-  { id: 'EP', code: 'ЭП', label: 'Электроснабжение (ПД / ИОС 5.1)', desc: 'Раздел проектной документации — система электроснабжения', weight: 0.30 },
-  { id: 'ES', code: 'ЭС', label: 'Силовое электрооборудование', desc: 'Распределительные устройства, щитовые, питание двигателей и установок', weight: 0.30 },
-  { id: 'EO', code: 'ЭО', label: 'Внутреннее электроосвещение', desc: 'Осветительные сети, щитки освещения, аварийное освещение', weight: 0.20 },
-  { id: 'EN', code: 'ЭН', label: 'Наружное электроснабжение', desc: 'Наружные сети, освещение территории, вводы в здание', weight: 0.25 },
-  { id: 'EM', code: 'ЭМ', label: 'Электрооборудование механизмов', desc: 'Краны, подъёмники, конвейеры, насосы, управление двигателями', weight: 0.20 },
-  { id: 'EG', code: 'ЭГ', label: 'Молниезащита и заземление', desc: 'Системы молниезащиты зданий, заземляющие устройства, уравнивание потенциалов', weight: 0.15 },
-  { id: 'EE', code: 'ЭЭ', label: 'Электроэнергетика / АСКУЭ', desc: 'Системы учёта электроэнергии, коммерческий и технический учёт', weight: 0.10 },
-  { id: 'EDG', code: 'ДГУ', label: 'Дизель-генераторы и ИБП', desc: 'Резервное и аварийное электропитание, схемы АВР', weight: 0.15 },
+  { id: 'EP', code: 'ЭП', label: 'Электроснабжение (ПД / ИОС 5.1)', desc: 'Раздел проектной документации — система электроснабжения' },
+  { id: 'ES', code: 'ЭС', label: 'Силовое электрооборудование', desc: 'Распределительные устройства, щитовые, питание двигателей и установок' },
+  { id: 'EO', code: 'ЭО', label: 'Внутреннее электроосвещение', desc: 'Осветительные сети, щитки освещения, аварийное освещение' },
+  { id: 'EN', code: 'ЭН', label: 'Наружное электроснабжение', desc: 'Наружные сети, освещение территории, вводы в здание' },
+  { id: 'EM', code: 'ЭМ', label: 'Электрооборудование механизмов', desc: 'Краны, подъёмники, конвейеры, насосы, управление двигателями' },
+  { id: 'EG', code: 'ЭГ', label: 'Молниезащита и заземление', desc: 'Системы молниезащиты зданий, заземляющие устройства, уравнивание потенциалов' },
 ]
 
 const NORMATIVE_DOCS = [
@@ -217,8 +214,8 @@ function Navbar() {
             <Icon name="Zap" size={16} className="text-white" />
           </div>
           <div>
-            <span className="font-bold text-slate-900 text-lg leading-none">ЭОЭС</span>
-            <p className="text-xs text-slate-500 leading-none mt-0.5">Электроснабжение · Освещение · Электрические сети</p>
+            <span className="font-bold text-slate-900 text-lg leading-none">ЭТМПРО</span>
+            <p className="text-xs text-slate-500 leading-none mt-0.5">Электротехническое моделирование и проектирование</p>
           </div>
         </div>
         <nav className="hidden lg:flex items-center gap-5">
@@ -256,39 +253,80 @@ function Navbar() {
   )
 }
 
-function CircuitPattern() {
+function CircuitPattern({ id = 'circuit', color = '#10b981', opacity = 0.07 }: { id?: string, color?: string, opacity?: number }) {
   return (
     <svg
-      className="absolute inset-0 w-full h-full opacity-[0.07]"
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ opacity }}
       xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid slice"
     >
       <defs>
-        <pattern id="circuit" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
-          <line x1="0" y1="30" x2="30" y2="30" stroke="#10b981" strokeWidth="1"/>
-          <line x1="30" y1="30" x2="30" y2="0" stroke="#10b981" strokeWidth="1"/>
-          <circle cx="30" cy="30" r="3" fill="none" stroke="#10b981" strokeWidth="1"/>
-          <line x1="30" y1="30" x2="90" y2="30" stroke="#10b981" strokeWidth="1"/>
-          <line x1="90" y1="30" x2="90" y2="60" stroke="#10b981" strokeWidth="1"/>
-          <circle cx="90" cy="60" r="3" fill="#10b981"/>
-          <line x1="90" y1="60" x2="120" y2="60" stroke="#10b981" strokeWidth="1"/>
-          <line x1="60" y1="30" x2="60" y2="90" stroke="#10b981" strokeWidth="1"/>
-          <line x1="60" y1="90" x2="0" y2="90" stroke="#10b981" strokeWidth="1"/>
-          <circle cx="60" cy="90" r="2.5" fill="none" stroke="#10b981" strokeWidth="1"/>
-          <rect x="40" y="25" width="20" height="10" fill="none" stroke="#10b981" strokeWidth="1"/>
-          <line x1="0" y1="60" x2="20" y2="60" stroke="#10b981" strokeWidth="1"/>
-          <circle cx="20" cy="60" r="2" fill="#10b981" opacity="0.6"/>
-          <line x1="60" y1="60" x2="80" y2="60" stroke="#10b981" strokeWidth="1"/>
-          <rect x="80" y="55" width="10" height="10" fill="none" stroke="#10b981" strokeWidth="1"/>
-          <line x1="90" y1="90" x2="120" y2="90" stroke="#10b981" strokeWidth="1"/>
-          <line x1="90" y1="90" x2="90" y2="120" stroke="#10b981" strokeWidth="1"/>
-          <circle cx="90" cy="90" r="3" fill="none" stroke="#10b981" strokeWidth="1"/>
-          <line x1="120" y1="30" x2="120" y2="0" stroke="#10b981" strokeWidth="1"/>
-          <line x1="30" y1="120" x2="30" y2="90" stroke="#10b981" strokeWidth="1"/>
-          <circle cx="30" cy="90" r="2" fill="#10b981" opacity="0.5"/>
+        <pattern id={id} x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
+          {/* Главные шины */}
+          <line x1="0" y1="20" x2="160" y2="20" stroke={color} strokeWidth="1.5"/>
+          <line x1="0" y1="140" x2="160" y2="140" stroke={color} strokeWidth="1.5"/>
+          <line x1="20" y1="0" x2="20" y2="160" stroke={color} strokeWidth="1.5"/>
+          <line x1="140" y1="0" x2="140" y2="160" stroke={color} strokeWidth="1.5"/>
+          {/* Перемычки */}
+          <line x1="20" y1="20" x2="80" y2="20" stroke={color} strokeWidth="1"/>
+          <line x1="80" y1="20" x2="80" y2="60" stroke={color} strokeWidth="1"/>
+          <line x1="80" y1="60" x2="140" y2="60" stroke={color} strokeWidth="1"/>
+          <line x1="140" y1="60" x2="140" y2="80" stroke={color} strokeWidth="1"/>
+          <line x1="20" y1="80" x2="60" y2="80" stroke={color} strokeWidth="1"/>
+          <line x1="60" y1="80" x2="60" y2="140" stroke={color} strokeWidth="1"/>
+          <line x1="100" y1="100" x2="140" y2="100" stroke={color} strokeWidth="1"/>
+          <line x1="100" y1="100" x2="100" y2="140" stroke={color} strokeWidth="1"/>
+          {/* Резистор (зигзаг) */}
+          <polyline points="22,80 26,73 30,87 34,73 38,87 42,73 46,80 50,80" fill="none" stroke={color} strokeWidth="1"/>
+          {/* Конденсатор */}
+          <line x1="80" y1="95" x2="80" y2="105" stroke={color} strokeWidth="1"/>
+          <line x1="74" y1="95" x2="86" y2="95" stroke={color} strokeWidth="1.5"/>
+          <line x1="74" y1="105" x2="86" y2="105" stroke={color} strokeWidth="1.5"/>
+          <line x1="80" y1="105" x2="80" y2="115" stroke={color} strokeWidth="1"/>
+          {/* Трансформатор (два кольца) */}
+          <circle cx="110" cy="50" r="6" fill="none" stroke={color} strokeWidth="1"/>
+          <circle cx="122" cy="50" r="6" fill="none" stroke={color} strokeWidth="1"/>
+          <line x1="104" y1="50" x2="100" y2="50" stroke={color} strokeWidth="1"/>
+          <line x1="128" y1="50" x2="132" y2="50" stroke={color} strokeWidth="1"/>
+          {/* Выключатель (разомкнут) */}
+          <circle cx="30" cy="50" r="2" fill={color}/>
+          <line x1="32" y1="50" x2="44" y2="42" stroke={color} strokeWidth="1"/>
+          <circle cx="46" cy="50" r="2" fill={color}/>
+          {/* Узловые точки */}
+          <circle cx="20" cy="20" r="3" fill={color}/>
+          <circle cx="140" cy="20" r="3" fill={color}/>
+          <circle cx="20" cy="140" r="3" fill={color}/>
+          <circle cx="140" cy="140" r="3" fill={color}/>
+          <circle cx="80" cy="20" r="2.5" fill="none" stroke={color} strokeWidth="1"/>
+          <circle cx="80" cy="60" r="2" fill={color}/>
+          <circle cx="140" cy="60" r="2" fill={color}/>
+          <circle cx="60" cy="80" r="2.5" fill="none" stroke={color} strokeWidth="1"/>
+          <circle cx="100" cy="100" r="2" fill={color}/>
+          {/* Измерительный прибор (кружок с буквой-обозначением) */}
+          <circle cx="30" cy="120" r="8" fill="none" stroke={color} strokeWidth="1"/>
+          <line x1="26" y1="120" x2="28" y2="116" stroke={color} strokeWidth="1"/>
+          <line x1="28" y1="116" x2="32" y2="124" stroke={color} strokeWidth="1"/>
+          <line x1="32" y1="124" x2="34" y2="120" stroke={color} strokeWidth="1"/>
+          <line x1="22" y1="120" x2="20" y2="120" stroke={color} strokeWidth="1"/>
+          <line x1="38" y1="120" x2="40" y2="120" stroke={color} strokeWidth="1"/>
+          {/* Заземление */}
+          <line x1="120" y1="120" x2="120" y2="132" stroke={color} strokeWidth="1"/>
+          <line x1="113" y1="132" x2="127" y2="132" stroke={color} strokeWidth="1.5"/>
+          <line x1="116" y1="136" x2="124" y2="136" stroke={color} strokeWidth="1"/>
+          <line x1="118" y1="140" x2="122" y2="140" stroke={color} strokeWidth="0.7"/>
+          {/* Катушка индуктивности */}
+          <path d="M100,80 Q103,74 106,80 Q109,74 112,80 Q115,74 118,80 Q121,74 124,80 Q127,74 130,80" fill="none" stroke={color} strokeWidth="1"/>
+          <line x1="100" y1="80" x2="98" y2="80" stroke={color} strokeWidth="1"/>
+          <line x1="130" y1="80" x2="132" y2="80" stroke={color} strokeWidth="1"/>
+          {/* Диод */}
+          <polygon points="50,120 58,115 58,125" fill="none" stroke={color} strokeWidth="1"/>
+          <line x1="58" y1="115" x2="58" y2="125" stroke={color} strokeWidth="1.5"/>
+          <line x1="44" y1="120" x2="50" y2="120" stroke={color} strokeWidth="1"/>
+          <line x1="58" y1="120" x2="64" y2="120" stroke={color} strokeWidth="1"/>
         </pattern>
       </defs>
-      <rect width="100%" height="100%" fill="url(#circuit)"/>
+      <rect width="100%" height="100%" fill={`url(#${id})`}/>
     </svg>
   )
 }
@@ -395,8 +433,9 @@ function ServiceCard({ s, i }: { s: typeof SERVICES[0]; i: number }) {
 
 function Services() {
   return (
-    <section id="services" className="bg-white py-20 border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="services" className="bg-white py-20 border-b border-slate-200 relative overflow-hidden">
+      <CircuitPattern id="circuit-services" color="#064e3b" opacity={0.04} />
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
         <div className="flex items-start justify-between mb-12 flex-wrap gap-4">
           <div>
             <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">Направления</p>
@@ -430,7 +469,7 @@ function Projects() {
               viewport={{ once: true }}
               transition={{ duration: 0.35, delay: i * 0.06 }}
             >
-              <span className="text-slate-300 font-mono text-sm w-6 shrink-0 hidden sm:block">{String(PROJECTS.length - i).padStart(2, '0')}</span>
+              <span className="text-slate-300 font-mono text-sm w-8 shrink-0 hidden sm:block">{p.num}</span>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors">{p.title}</p>
                 <p className="text-slate-500 text-sm mt-0.5">{p.desc}</p>
@@ -452,54 +491,6 @@ function Projects() {
   )
 }
 
-function Expertise() {
-  const items = [
-    { icon: 'Building2', title: 'Государственная экспертиза (ГГЭ)', desc: 'Сопровождение проектной документации в Главгосэкспертизе России и территориальных органах. Подготовка ответов на замечания, корректировка ПД до получения положительного заключения.' },
-    { icon: 'BadgeCheck', title: 'Негосударственная экспертиза (НГЭ)', desc: 'Прохождение НГЭ в аккредитованных организациях. Полное сопровождение от подачи до получения положительного заключения.' },
-    { icon: 'FileCheck', title: 'Подготовка к экспертизе', desc: 'Самопроверка комплектности и соответствия ПД требованиям ПП РФ № 87, ГОСТ Р 21.101-2026, СП и ПУЭ. Минимизируем замечания на старте.' },
-    { icon: 'MessageSquare', title: 'Ответы на замечания', desc: 'Оперативная корректировка проектных решений по замечаниям эксперта, повторная подача документации на проверку.' },
-  ]
-  return (
-    <section id="expertise" className="bg-white py-20 border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-6">
-        <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">Экспертиза проектов</p>
-        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Прохождение ГГЭ и НГЭ</h2>
-        <p className="text-slate-500 mb-10 max-w-2xl">Помогаем пройти государственную (ГГЭ) и негосударственную (НГЭ) экспертизу проекта. Опыт более 50 успешных заключений.</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-slate-200 border border-slate-200">
-          {items.map((it, i) => (
-            <motion.div
-              key={it.title}
-              className="bg-white p-7"
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: i * 0.08 }}
-            >
-              <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-4">
-                <Icon name={it.icon} size={18} className="text-emerald-600" fallback="CheckCircle" />
-              </div>
-              <h3 className="font-semibold text-slate-900 text-lg mb-2">{it.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{it.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-        <div className="mt-8 border border-emerald-200 bg-emerald-50 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <Icon name="ShieldCheck" size={22} className="text-emerald-600 shrink-0 mt-0.5" fallback="CheckCircle" />
-            <div>
-              <p className="font-semibold text-slate-900">50+ положительных заключений ГГЭ и НГЭ</p>
-              <p className="text-slate-600 text-sm mt-0.5">Гарантируем доведение проекта до положительного заключения экспертизы</p>
-            </div>
-          </div>
-          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shrink-0" onClick={() => scrollTo('contacts')}>
-            Обсудить экспертизу
-          </Button>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 function Calculator() {
   const [objType, setObjType] = useState(OBJECT_TYPES[0].id)
   const [area, setArea] = useState(1000)
@@ -509,9 +500,9 @@ function Calculator() {
   const [lineLengthInput, setLineLengthInput] = useState('0')
   const [lineType, setLineType] = useState<'none' | 'KL' | 'VL'>('none')
   const [selectedMarks, setSelectedMarks] = useState<string[]>(['EP'])
-  const [hasLighting, setHasLighting] = useState(false)
+  const [hasEE, setHasEE] = useState(false)
+  const [hasDGU, setHasDGU] = useState(false)
   const [hasArchlight, setHasArchlight] = useState(false)
-  const [hasLightning, setHasLightning] = useState(false)
 
   const handleAreaInput = (val: string) => {
     setAreaInput(val)
@@ -543,21 +534,27 @@ function Calculator() {
   }
 
   const base = OBJECT_TYPES.find(o => o.id === objType)?.base ?? 480000
-  const areaCoeff = 0.4 + (area / 10000) * 0.9
+  const areaCoeff = 0.7 + (area / 10000) * 0.9
   const voltCoeff = voltages.reduce((acc, v) => {
     const opt = VOLTAGE_OPTIONS.find(o => o.v === v)
     return Math.max(acc, opt?.mult ?? 1)
   }, 1) + (voltages.length > 1 ? 0.15 : 0)
   const lineCoeff = lineType !== 'none' ? lineLength * (lineType === 'KL' ? 35000 : 20000) : 0
-  const marksWeightSum = selectedMarks.reduce((sum, id) => {
-    const m = PROJECT_MARKS.find(p => p.id === id)
-    return sum + (m?.weight ?? 0.20)
-  }, 0)
-  const extras = (hasLighting ? 80000 : 0) + (hasArchlight ? 120000 : 0) + (hasLightning ? 60000 : 0)
-  const projectCost = base * areaCoeff * voltCoeff * marksWeightSum
-  const minProject = 80000
-  const total = Math.round((Math.max(projectCost, minProject) + extras + lineCoeff) / 10000) * 10000
-  const days = Math.round(15 + (area / 5000) * 8 + (hasArchlight ? 8 : 0) + (voltages.length > 1 ? 7 : 0) + (selectedMarks.length - 1) * 4 + lineLength * 0.5)
+  const marksCoeff = 1 + (selectedMarks.length - 1) * 0.18
+  const extras = (hasEE ? 70000 : 0) + (hasDGU ? 90000 : 0) + (hasArchlight ? 120000 : 0)
+  const total = Math.round((base * areaCoeff * voltCoeff * marksCoeff + extras + lineCoeff) / 10000) * 10000
+  const days = Math.round(20 + (area / 5000) * 10 + (hasArchlight ? 10 : 0) + (voltages.length > 1 ? 10 : 0) + (selectedMarks.length - 1) * 5 + lineLength * 0.5)
+
+  const formatPrice = (val: number) => {
+    if (val < 1000000) {
+      const lo = Math.round(val * 0.85 / 1000)
+      const hi = Math.round(val / 1000)
+      return `${lo} тыс. ₽ — ${hi} тыс. ₽`
+    }
+    const lo = (val * 0.85 / 1000000).toFixed(1)
+    const hi = (val / 1000000).toFixed(1)
+    return `${lo} млн ₽ — ${hi} млн ₽`
+  }
 
   return (
     <section id="calculator" className="bg-white py-20 border-b border-slate-200">
@@ -711,9 +708,9 @@ function Calculator() {
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Дополнительные разделы</p>
               <div className="space-y-2">
                 {[
-                  { label: 'Освещение (внутреннее / наружное)', val: hasLighting, set: setHasLighting, price: '+80 000 ₽' },
+                  { label: 'ЭЭ — Электроэнергетика / АСКУЭ', val: hasEE, set: setHasEE, price: '+70 000 ₽' },
+                  { label: 'ДГУ — Дизель-генераторы и ИБП', val: hasDGU, set: setHasDGU, price: '+90 000 ₽' },
                   { label: 'Архитектурная подсветка', val: hasArchlight, set: setHasArchlight, price: '+120 000 ₽' },
-                  { label: 'Молниезащита и заземление', val: hasLightning, set: setHasLightning, price: '+60 000 ₽' },
                 ].map(({ label, val, set, price }) => (
                   <label key={label} className="flex items-center justify-between p-3 border border-slate-200 hover:border-slate-300 cursor-pointer transition-colors">
                     <div className="flex items-center gap-3">
@@ -733,13 +730,12 @@ function Calculator() {
 
           </div>
           <div className="lg:col-span-1">
-            <div className="bg-slate-900 p-6 sticky top-20">
+            <div className="bg-slate-900 p-6 sticky top-20 relative overflow-hidden">
+              <CircuitPattern id="circuit-calc" color="#10b981" opacity={0.08} />
+              <div className="relative z-10">
               <p className="text-slate-400 text-xs font-mono uppercase tracking-widest mb-4">Ориентировочная стоимость</p>
               <p className="text-3xl font-bold text-white leading-tight">
-                {total < 1000000
-                  ? `${Math.round(total * 0.85 / 1000)} – ${Math.round(total / 1000)} тыс. ₽`
-                  : `${(total * 0.85 / 1000000).toFixed(1)} – ${(total / 1000000).toFixed(1)} млн ₽`
-                }
+                {formatPrice(total)}
               </p>
               <div className="mt-6 border-t border-slate-700 pt-5 space-y-3">
                 <div className="flex justify-between text-sm">
@@ -769,6 +765,7 @@ function Calculator() {
               <Button className="w-full mt-5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold" onClick={() => scrollTo('contacts')}>
                 Получить точный расчёт
               </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -836,7 +833,7 @@ function About() {
                 'ГОСТ Р 21.101-2026 — актуальный стандарт на проектную документацию',
                 'Официальный партнёр IEK, EKF, Systeme Electric, Chint, КЭАЗ',
                 'Опыт более 15 лет, 200+ реализованных объектов',
-                '50+ положительных заключений ГГЭ и НГЭ',
+                'Помогаем пройти государственную (ГГЭ) и негосударственную (НГЭ) экспертизу проекта',
                 'Бесплатная экспертиза вашей проектной документации',
               ].map(f => (
                 <div key={f} className="flex items-start gap-3">
@@ -921,8 +918,9 @@ function Contacts() {
   }
 
   return (
-    <section id="contacts" className="bg-slate-900 py-20">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="contacts" className="bg-slate-900 py-20 relative overflow-hidden">
+      <CircuitPattern id="circuit-contacts" color="#10b981" opacity={0.05} />
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           <div>
             <p className="text-emerald-400 text-sm font-mono tracking-widest uppercase mb-2">Контакты</p>
@@ -1050,20 +1048,29 @@ function Contacts() {
 
 function Footer() {
   return (
-    <footer className="bg-slate-950 border-t border-slate-800 py-8">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-emerald-600 flex items-center justify-center">
-            <Icon name="Zap" size={12} className="text-white" />
+    <footer className="bg-slate-950 border-t border-slate-800">
+      <div className="max-w-7xl mx-auto px-6 pt-8 pb-4">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-emerald-600 flex items-center justify-center">
+              <Icon name="Zap" size={12} className="text-white" />
+            </div>
+            <span className="text-slate-400 text-sm">ЭТМПРО · eoes.ru © 2026</span>
           </div>
-          <span className="text-slate-400 text-sm">ЭОЭС · eoes.ru © 2026</span>
+          <div className="flex items-center gap-4 flex-wrap justify-center">
+            {NAV_LINKS.map(l => (
+              <a key={l.href} href={l.href} className="text-slate-500 hover:text-slate-300 text-xs transition-colors">{l.label}</a>
+            ))}
+          </div>
+          <p className="text-slate-600 text-xs">info@eoes.ru</p>
         </div>
-        <div className="flex items-center gap-4 flex-wrap justify-center">
-          {NAV_LINKS.map(l => (
-            <a key={l.href} href={l.href} className="text-slate-500 hover:text-slate-300 text-xs transition-colors">{l.label}</a>
-          ))}
+        <div className="border-t border-slate-800 pt-4">
+          <p className="text-slate-600 text-xs leading-relaxed text-center">
+            Вся информация, представленная на сайте, носит исключительно информационный характер и не является публичной офертой в соответствии со ст. 437 ГК РФ.
+            Стоимость услуг рассчитывается индивидуально по итогам изучения технического задания.
+            Все права защищены. Использование материалов сайта без письменного разрешения правообладателя запрещено.
+          </p>
         </div>
-        <p className="text-slate-600 text-xs">info@eoes.ru</p>
       </div>
     </footer>
   )
@@ -1077,7 +1084,6 @@ export default function LandingPage() {
       <Services />
       <Projects />
       <Calculator />
-      <Expertise />
       <About />
       <Normative />
       <Contacts />
