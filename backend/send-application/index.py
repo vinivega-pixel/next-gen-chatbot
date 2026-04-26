@@ -101,6 +101,7 @@ def handler(event: dict, context) -> dict:
         headers={
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (compatible; ETMPRO-Mailer/1.0)",
         },
         method="POST",
     )
