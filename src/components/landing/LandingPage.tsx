@@ -907,7 +907,12 @@ function Contacts() {
   const [description, setDescription] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const MAX_FILES = 10
+  const MAX_FILES = 5
+  const MAX_TOTAL_MB = 4.5
+  const MAX_TOTAL_BYTES = MAX_TOTAL_MB * 1024 * 1024
+  const ALLOWED_TYPES = '.pdf,.doc,.docx,.xls,.xlsx,.dwg,.dxf,.jpg,.jpeg,.png,.zip,.rar'
+
+  const totalSize = files.reduce((sum, f) => sum + f.size, 0)
 
   const handleFiles = (incoming: FileList | null) => {
     if (!incoming) return
@@ -1045,9 +1050,17 @@ function Contacts() {
                       onDragOver={e => e.preventDefault()}
                       onClick={() => fileInputRef.current?.click()}
                     >
-                      <input ref={fileInputRef} type="file" multiple className="hidden" onChange={e => handleFiles(e.target.files)} />
+                      <input ref={fileInputRef} type="file" multiple accept={ALLOWED_TYPES} className="hidden" onChange={e => handleFiles(e.target.files)} />
                       <Icon name="Upload" size={20} className="text-slate-500 mx-auto mb-2" />
                       <p className="text-slate-500 text-xs">Перетащите файлы или нажмите для выбора</p>
+                      <p className="text-slate-600 text-xs mt-1">PDF, DOC, DOCX, XLS, XLSX, DWG, DXF, JPG, PNG, ZIP, RAR</p>
+                    </div>
+                    <div className="mt-2 bg-yellow-500/10 border border-yellow-500/30 px-3 py-2 flex items-start gap-2">
+                      <Icon name="AlertTriangle" size={13} className="text-yellow-400 mt-0.5 shrink-0" />
+                      <p className="text-yellow-400/90 text-xs leading-relaxed">
+                        Общий объём документов через заявку — не более {MAX_TOTAL_MB} МБ. Остальные документы досылайте напрямую с вашего почтового ящика на&nbsp;
+                        <a href="mailto:info@eoes.ru" className="underline hover:text-yellow-300">info@eoes.ru</a>
+                      </p>
                     </div>
                     {files.length > 0 && (
                       <div className="mt-2 space-y-1">
@@ -1055,11 +1068,15 @@ function Contacts() {
                           <div key={i} className="flex items-center gap-2 text-xs text-slate-400 bg-slate-700/50 px-3 py-1.5">
                             <Icon name="File" size={12} />
                             <span className="flex-1 truncate">{f.name}</span>
-                            <button onClick={() => removeFile(i)} className="text-slate-500 hover:text-red-400 transition-colors ml-2 shrink-0">
+                            <span className="text-slate-500 shrink-0">{(f.size / 1024 / 1024).toFixed(1)} МБ</span>
+                            <button onClick={() => removeFile(i)} className="text-slate-500 hover:text-red-400 transition-colors ml-1 shrink-0">
                               <Icon name="X" size={13} />
                             </button>
                           </div>
                         ))}
+                        <div className={`text-xs px-1 mt-1 ${totalSize > MAX_TOTAL_BYTES ? 'text-red-400' : 'text-slate-500'}`}>
+                          Итого: {(totalSize / 1024 / 1024).toFixed(2)} МБ из {MAX_TOTAL_MB} МБ
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1068,7 +1085,7 @@ function Contacts() {
                   )}
                   <Button
                     onClick={handleSubmit}
-                    disabled={status === 'loading' || !name || !contact}
+                    disabled={status === 'loading' || !name || !contact || totalSize > MAX_TOTAL_BYTES}
                     className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold py-5"
                   >
                     {status === 'loading' ? 'Отправляем...' : 'Отправить заявку'}
