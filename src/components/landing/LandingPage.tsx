@@ -186,21 +186,30 @@ const PROJECT_MARKS = [
 ]
 
 const NORMATIVE_DOCS = [
-  { code: 'ГОСТ Р 21.101-2026', title: 'Основные требования к проектной и рабочей документации', scope: 'Все разделы' },
-  { code: 'ПУЭ (7-е изд.)', title: 'Правила устройства электроустановок', scope: 'Все разделы' },
-  { code: 'СП 256.1325800.2016', title: 'Электроустановки жилых и общественных зданий (с изм. №1–5, ред. 2022)', scope: 'Электроснабжение' },
-  { code: 'ГОСТ Р 50571 (серия)', title: 'Электроустановки низкого напряжения', scope: 'Электроснабжение 0,4 кВ' },
-  { code: 'СП 76.13330.2016', title: 'Электротехнические устройства (актуализ. СНиП 3.05.06-85)', scope: 'Наружные сети, монтаж' },
-  { code: 'ГОСТ 31565-2012', title: 'Кабельные изделия. Требования пожарной безопасности', scope: 'Кабельные линии' },
-  { code: 'ГОСТ Р МЭК 60364-5-52', title: 'Выбор и монтаж электрооборудования. Кабельные системы', scope: 'Кабель по воздуху / лоткам' },
-  { code: 'СП 52.13330.2016', title: 'Естественное и искусственное освещение (актуализ. СНиП 23-05-95)', scope: 'Освещение' },
-  { code: 'МЭК 60598 / ГОСТ Р МЭК 60598', title: 'Светильники. Общие требования и методы испытаний', scope: 'Осветительные приборы' },
-  { code: 'ГОСТ Р МЭК 62305 (серия)', title: 'Защита от грозовых перенапряжений (в т.ч. ГОСТ Р 59789-2021)', scope: 'Молниезащита / УЗИП' },
-  { code: 'ГОСТ 12.1.030-81 ССБТ', title: 'Защитное заземление и зануление', scope: 'Заземление' },
-  { code: 'ГОСТ Р МЭК 61936-1', title: 'Электроустановки переменного тока выше 1 кВ', scope: 'Высоковольтные установки' },
-  { code: 'ГОСТ Р МЭК 61439 (серия)', title: 'Низковольтные комплектные устройства распределения и управления', scope: 'ВРУ, ГРЩ, ШР' },
-  { code: 'СП 4.13130.2013', title: 'Системы противопожарной защиты. Ограничение распространения пожара', scope: 'Противопожарные разрывы' },
-  { code: 'Приказ Минстроя № 985/пр', title: 'Правила разработки и оформления ПД и РД', scope: 'Состав документации' },
+  { code: 'ГОСТ Р 21.101-2026', title: 'Основные требования к проектной и рабочей документации', scope: 'Все разделы', active: true },
+  { code: 'ПУЭ (7-е изд.)', title: 'Правила устройства электроустановок', scope: 'Все разделы', active: true },
+  { code: 'Приказ Минстроя № 985/пр', title: 'Правила разработки и оформления ПД и РД', scope: 'Состав документации', active: true },
+  { code: 'СП 256.1325800.2016', title: 'Электроустановки жилых и общественных зданий (с изм. №1–5, ред. 2022)', scope: 'Электроснабжение', active: true },
+  { code: 'ГОСТ Р 50571 (серия)', title: 'Электроустановки низкого напряжения', scope: 'Электроснабжение 0,4 кВ', active: true },
+  { code: 'СП 76.13330.2016', title: 'Электротехнические устройства (актуализ. СНиП 3.05.06-85)', scope: 'Наружные сети, монтаж', active: true },
+  { code: 'ГОСТ Р МЭК 61936-1', title: 'Электроустановки переменного тока выше 1 кВ', scope: 'Высоковольтные установки', active: true },
+  { code: 'ГОСТ Р МЭК 61439 (серия)', title: 'Низковольтные комплектные устройства распределения и управления', scope: 'ВРУ, ГРЩ, ШР', active: true },
+  { code: 'СП 22.13330.2016', title: 'Основания зданий и сооружений (при прокладке кабелей в грунте)', scope: 'Кабель в земле', active: true },
+  { code: 'СТО 56947007-29.060.20.010-2008', title: 'Кабельные линии 6–35 кВ. Технические требования (ФСК ЕЭС)', scope: 'Кабель 6–35 кВ', active: true },
+  { code: 'СТО 56947007-29.060.20.071-2011', title: 'Прокладка кабелей 6–35 кВ в земле. Нормы и требования', scope: 'Кабель в земле до 35 кВ', active: true },
+  { code: 'ГОСТ Р 55025-2012', title: 'Кабели силовые с пластмассовой изоляцией. Технические условия', scope: 'Кабель до 35 кВ', active: true },
+  { code: 'ГОСТ 31565-2012', title: 'Кабельные изделия. Требования пожарной безопасности', scope: 'Кабельные линии', active: true },
+  { code: 'ГОСТ Р МЭК 60364-5-52', title: 'Выбор и монтаж электрооборудования. Кабельные системы', scope: 'Кабель по воздуху / лоткам', active: true },
+  { code: 'СП 18.13330.2019', title: 'Производственные объекты. Планировочная организация (трассы КЛ)', scope: 'Трассировка КЛ на промобъектах', active: true },
+  { code: 'СП 52.13330.2016', title: 'Естественное и искусственное освещение (актуализ. СНиП 23-05-95)', scope: 'Освещение', active: true },
+  { code: 'МЭК 60598 / ГОСТ Р МЭК 60598', title: 'Светильники. Общие требования и методы испытаний', scope: 'Осветительные приборы', active: true },
+  { code: 'ГОСТ Р МЭК 62305 (серия)', title: 'Защита от грозовых перенапряжений (в т.ч. ГОСТ Р 59789-2021)', scope: 'Молниезащита / УЗИП', active: true },
+  { code: 'ГОСТ 12.1.030-81 ССБТ', title: 'Защитное заземление и зануление', scope: 'Заземление', active: true },
+  { code: 'СП 4.13130.2013', title: 'Системы противопожарной защиты. Ограничение распространения пожара', scope: 'Противопожарные разрывы', active: true },
+  { code: 'ГОСТ Р 58095.0-2018', title: 'Системы заземления. Общие требования', scope: 'Системы заземления', active: true },
+  { code: 'СТО 56947007-29.240.10.028-2009', title: 'Нормы технологического проектирования подстанций 35–750 кВ (ФСК ЕЭС)', scope: 'Подстанции 35–110 кВ', active: true },
+  { code: 'ГОСТ Р 56227-2014', title: 'Установки распределения электроэнергии. Общие технические требования', scope: 'КРУ / КСО / ячейки 6–35 кВ', active: true },
+  { code: 'СП 42.13330.2016', title: 'Градостроительство. Планировка и застройка (трассы наружных КЛ)', scope: 'Наружные кабельные трассы', active: true },
 ]
 
 function scrollTo(id: string) {
@@ -236,9 +245,18 @@ function Navbar() {
             Оставить заявку
           </Button>
         </div>
-        <button className="lg:hidden p-2" onClick={() => setOpen(!open)}>
-          <Icon name={open ? 'X' : 'Menu'} size={22} className="text-slate-700" />
-        </button>
+        <div className="lg:hidden flex items-center gap-1">
+          <button
+            className="md:hidden p-2 text-slate-500 hover:text-emerald-600 transition-colors"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label="Наверх"
+          >
+            <Icon name="ArrowUp" size={20} className="text-slate-500" />
+          </button>
+          <button className="p-2" onClick={() => setOpen(!open)}>
+            <Icon name={open ? 'X' : 'Menu'} size={22} className="text-slate-700" />
+          </button>
+        </div>
       </div>
       {open && (
         <div className="lg:hidden bg-white border-t border-slate-100 px-6 py-4 space-y-3">
@@ -258,7 +276,7 @@ function Navbar() {
 
 function MobileBottomBar() {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-slate-200 shadow-[0_-2px_12px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center gap-3">
+    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-slate-200 shadow-[0_-2px_12px_rgba(0,0,0,0.08)] px-3 py-3 flex items-center gap-2">
       <a
         href="tel:+79782203380"
         className="flex items-center gap-2 flex-1 min-w-0 bg-slate-100 hover:bg-slate-200 transition-colors px-3 py-2.5 rounded-sm"
@@ -267,11 +285,18 @@ function MobileBottomBar() {
         <span className="text-sm font-semibold text-slate-800 truncate">+7 978 220-3-380</span>
       </a>
       <Button
-        className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 text-sm shrink-0"
+        className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2.5 text-sm shrink-0"
         onClick={() => scrollTo('contacts')}
       >
         Заявка
       </Button>
+      <button
+        className="w-10 h-10 flex items-center justify-center bg-slate-900 hover:bg-slate-700 transition-colors shrink-0 rounded-sm"
+        onClick={() => scrollTo('contacts')}
+        aria-label="К контактам"
+      >
+        <Icon name="ArrowDown" size={17} className="text-white" />
+      </button>
     </div>
   )
 }
@@ -828,9 +853,10 @@ function Normative() {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-slate-900 text-white">
-                <th className="text-left px-4 py-3 text-sm font-semibold w-64">Обозначение</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold w-56">Обозначение</th>
                 <th className="text-left px-4 py-3 text-sm font-semibold">Наименование</th>
                 <th className="text-left px-4 py-3 text-sm font-semibold w-48 hidden sm:table-cell">Область применения</th>
+                <th className="text-left px-4 py-3 text-sm font-semibold w-28 hidden md:table-cell">Статус</th>
               </tr>
             </thead>
             <tbody>
@@ -846,6 +872,12 @@ function Normative() {
                   <td className="px-4 py-3 text-sm text-emerald-700 font-semibold align-top">{doc.code}</td>
                   <td className="px-4 py-3 text-sm text-slate-700 align-top">{doc.title}</td>
                   <td className="px-4 py-3 text-sm text-slate-500 align-top hidden sm:table-cell">{doc.scope}</td>
+                  <td className="px-4 py-3 align-top hidden md:table-cell">
+                    <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded-sm ${doc.active ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-600'}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${doc.active ? 'bg-emerald-500' : 'bg-red-400'}`} />
+                      {doc.active ? 'Действует' : 'Не действует'}
+                    </span>
+                  </td>
                 </motion.tr>
               ))}
             </tbody>
