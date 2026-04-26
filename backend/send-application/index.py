@@ -31,8 +31,10 @@ def handler(event: dict, context) -> dict:
         body_raw = event.get("body") or "{}"
         if event.get("isBase64Encoded"):
             body_raw = base64.b64decode(body_raw).decode("utf-8")
+        print(f"[DEBUG] body size: {len(body_raw)} bytes, isBase64: {event.get('isBase64Encoded')}")
         body = json.loads(body_raw)
     except Exception as e:
+        print(f"[ERROR] parse body: {e}")
         return {"statusCode": 400, "headers": cors_headers, "body": json.dumps({"error": str(e)})}
 
     name = body.get("name", "—")
@@ -53,11 +55,14 @@ def handler(event: dict, context) -> dict:
         project_id = os.environ["AWS_ACCESS_KEY_ID"]
         folder = f"applications/{uuid.uuid4().hex}"
 
+        print(f"[DEBUG] uploading {len(files)} files")
         for f in files:
             file_name = f.get("name", "file")
             file_content_b64 = f.get("content", "")
             file_size = f.get("size", 0)
+            print(f"[DEBUG] file: {file_name}, size: {file_size}, has_content: {bool(file_content_b64)}, content_len: {len(file_content_b64)}")
             if not file_content_b64:
+                file_links.append({"name": file_name, "url": None, "size": file_size})
                 continue
             try:
                 file_data = base64.b64decode(file_content_b64)
@@ -70,8 +75,9 @@ def handler(event: dict, context) -> dict:
                 )
                 cdn_url = f"https://cdn.poehali.dev/projects/{project_id}/bucket/{key}"
                 file_links.append({"name": file_name, "url": cdn_url, "size": file_size})
+                print(f"[DEBUG] uploaded: {cdn_url}")
             except Exception as e:
-                print(f"[WARN] Failed to upload {file_name}: {e}")
+                print(f"[ERROR] Failed to upload {file_name}: {e}")
                 file_links.append({"name": file_name, "url": None, "size": file_size})
 
     # Формирование секции файлов в письме
