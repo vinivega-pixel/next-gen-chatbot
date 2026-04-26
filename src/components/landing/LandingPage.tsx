@@ -166,13 +166,14 @@ const VOLTAGE_OPTIONS = [
 ]
 
 const PROJECT_MARKS = [
-  { id: 'EP', code: 'ЭП', label: 'Электроснабжение (ПД / ИОС 5.1)', desc: 'Раздел проектной документации — система электроснабжения' },
-  { id: 'ES', code: 'ЭС', label: 'Силовое электрооборудование', desc: 'Распределительные устройства, щитовые, питание двигателей и установок' },
-  { id: 'EO', code: 'ЭО', label: 'Внутреннее электроосвещение', desc: 'Осветительные сети, щитки освещения, аварийное освещение' },
-  { id: 'EN', code: 'ЭН', label: 'Наружное электроснабжение', desc: 'Наружные сети, освещение территории, вводы в здание' },
-  { id: 'EM', code: 'ЭМ', label: 'Электрооборудование механизмов', desc: 'Краны, подъёмники, конвейеры, насосы, управление двигателями' },
-  { id: 'EG', code: 'ЭГ', label: 'Электрогенераторные установки', desc: 'Дизель-генераторы, ИБП, схемы резервного ввода' },
-  { id: 'EE', code: 'ЭЭ', label: 'Электроэнергетика / АСКУЭ', desc: 'Системы учёта электроэнергии, коммерческий и технический учёт' },
+  { id: 'EP', code: 'ЭП', label: 'Электроснабжение (ПД / ИОС 5.1)', desc: 'Раздел проектной документации — система электроснабжения', weight: 0.30 },
+  { id: 'ES', code: 'ЭС', label: 'Силовое электрооборудование', desc: 'Распределительные устройства, щитовые, питание двигателей и установок', weight: 0.30 },
+  { id: 'EO', code: 'ЭО', label: 'Внутреннее электроосвещение', desc: 'Осветительные сети, щитки освещения, аварийное освещение', weight: 0.20 },
+  { id: 'EN', code: 'ЭН', label: 'Наружное электроснабжение', desc: 'Наружные сети, освещение территории, вводы в здание', weight: 0.25 },
+  { id: 'EM', code: 'ЭМ', label: 'Электрооборудование механизмов', desc: 'Краны, подъёмники, конвейеры, насосы, управление двигателями', weight: 0.20 },
+  { id: 'EG', code: 'ЭГ', label: 'Молниезащита и заземление', desc: 'Системы молниезащиты зданий, заземляющие устройства, уравнивание потенциалов', weight: 0.15 },
+  { id: 'EE', code: 'ЭЭ', label: 'Электроэнергетика / АСКУЭ', desc: 'Системы учёта электроэнергии, коммерческий и технический учёт', weight: 0.10 },
+  { id: 'EDG', code: 'ДГУ', label: 'Дизель-генераторы и ИБП', desc: 'Резервное и аварийное электропитание, схемы АВР', weight: 0.15 },
 ]
 
 const NORMATIVE_DOCS = [
@@ -216,8 +217,8 @@ function Navbar() {
             <Icon name="Zap" size={16} className="text-white" />
           </div>
           <div>
-            <span className="font-bold text-slate-900 text-lg leading-none">ЭТМПРО</span>
-            <p className="text-xs text-slate-500 leading-none mt-0.5">Электротехническое моделирование и проектирование</p>
+            <span className="font-bold text-slate-900 text-lg leading-none">ЭОЭС</span>
+            <p className="text-xs text-slate-500 leading-none mt-0.5">Электроснабжение · Освещение · Электрические сети</p>
           </div>
         </div>
         <nav className="hidden lg:flex items-center gap-5">
@@ -308,7 +309,7 @@ function Hero() {
         <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
           <span className="inline-flex items-center gap-2 bg-emerald-600/20 border border-emerald-500/30 text-emerald-400 text-xs font-mono tracking-widest uppercase px-3 py-1.5 mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Электротехническое моделирование и проектирование
+            ЭОЭС · Электроснабжение и освещение
           </span>
           <h1 className="text-4xl md:text-6xl font-bold text-white leading-[1.1] max-w-3xl mb-4">
             Проектирование систем электроснабжения и автоматизации
@@ -317,7 +318,7 @@ function Hero() {
             Создание алгоритмов и автоматизации производственных объектов
           </p>
           <p className="text-slate-400 text-lg md:text-xl max-w-xl mb-10 leading-relaxed">
-            Подбор индивидуального оборудования (УКРМ, ИБП, стабилизаторы) — полный комплект документации по ГОСТ Р 21.101-2026.
+            Полный комплект проектной и рабочей документации по ГОСТ Р 21.101-2026. Сопровождение в государственной (ГГЭ) и негосударственной экспертизе.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button
@@ -429,7 +430,7 @@ function Projects() {
               viewport={{ once: true }}
               transition={{ duration: 0.35, delay: i * 0.06 }}
             >
-              <span className="text-slate-300 font-mono text-sm w-6 shrink-0 hidden sm:block">{String(i + 1).padStart(2, '0')}</span>
+              <span className="text-slate-300 font-mono text-sm w-6 shrink-0 hidden sm:block">{String(PROJECTS.length - i).padStart(2, '0')}</span>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors">{p.title}</p>
                 <p className="text-slate-500 text-sm mt-0.5">{p.desc}</p>
@@ -442,50 +443,56 @@ function Projects() {
             </motion.div>
           ))}
         </div>
+        <div className="mt-6 flex items-center gap-3 text-slate-500 text-sm">
+          <Icon name="FileSearch" size={16} className="text-emerald-600 shrink-0" fallback="FileText" />
+          <span>Образцы проектов — по запросу, под NDA. <button onClick={() => scrollTo('contacts')} className="text-emerald-700 hover:underline font-medium">Запросить</button></span>
+        </div>
       </div>
     </section>
   )
 }
 
-function Samples() {
+function Expertise() {
+  const items = [
+    { icon: 'Building2', title: 'Государственная экспертиза (ГГЭ)', desc: 'Сопровождение проектной документации в Главгосэкспертизе России и территориальных органах. Подготовка ответов на замечания, корректировка ПД до получения положительного заключения.' },
+    { icon: 'BadgeCheck', title: 'Негосударственная экспертиза (НГЭ)', desc: 'Прохождение НГЭ в аккредитованных организациях. Полное сопровождение от подачи до получения положительного заключения.' },
+    { icon: 'FileCheck', title: 'Подготовка к экспертизе', desc: 'Самопроверка комплектности и соответствия ПД требованиям ПП РФ № 87, ГОСТ Р 21.101-2026, СП и ПУЭ. Минимизируем замечания на старте.' },
+    { icon: 'MessageSquare', title: 'Ответы на замечания', desc: 'Оперативная корректировка проектных решений по замечаниям эксперта, повторная подача документации на проверку.' },
+  ]
   return (
-    <section id="samples" className="bg-white py-20 border-b border-slate-200">
+    <section id="expertise" className="bg-white py-20 border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-6">
-        <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">Примеры работ</p>
-        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Образцы проектов</h2>
-        <p className="text-slate-500 mb-10 max-w-2xl">Примеры состава рабочей и проектной документации по разделам ИОС 5.1. Полные комплекты предоставляем по запросу под NDA.</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {SAMPLES.map((s, i) => (
+        <p className="text-emerald-600 text-sm font-mono tracking-widest uppercase mb-2">Экспертиза проектов</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Прохождение ГГЭ и НГЭ</h2>
+        <p className="text-slate-500 mb-10 max-w-2xl">Помогаем пройти государственную (ГГЭ) и негосударственную (НГЭ) экспертизу проекта. Опыт более 50 успешных заключений.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-slate-200 border border-slate-200">
+          {items.map((it, i) => (
             <motion.div
-              key={s.title}
-              className="border border-slate-200 bg-white hover:border-emerald-400 transition-colors group p-6"
+              key={it.title}
+              className="bg-white p-7"
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: i * 0.07 }}
+              transition={{ duration: 0.35, delay: i * 0.08 }}
             >
-              <div className="flex items-start justify-between mb-4">
-                <span className="inline-block bg-emerald-600 text-white text-xs font-mono font-bold px-2.5 py-1">{s.mark}</span>
-                <span className="text-xs text-slate-400 font-mono">{s.sheets} листов</span>
+              <div className="w-10 h-10 bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-4">
+                <Icon name={it.icon} size={18} className="text-emerald-600" fallback="CheckCircle" />
               </div>
-              <h3 className="font-semibold text-slate-900 text-base mb-1 group-hover:text-emerald-700 transition-colors">{s.title}</h3>
-              <p className="text-slate-400 text-xs mb-3">{s.type}</p>
-              <p className="text-slate-600 text-sm leading-relaxed mb-4">{s.desc}</p>
-              <div className="flex flex-wrap gap-1.5">
-                {s.tags.map(t => (
-                  <span key={t} className="text-xs border border-slate-200 text-slate-500 px-2 py-0.5">{t}</span>
-                ))}
-              </div>
+              <h3 className="font-semibold text-slate-900 text-lg mb-2">{it.title}</h3>
+              <p className="text-slate-500 text-sm leading-relaxed">{it.desc}</p>
             </motion.div>
           ))}
         </div>
-        <div className="mt-8 border border-dashed border-emerald-300 bg-emerald-50/50 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <p className="font-semibold text-slate-900">Нужен полный комплект документации в качестве образца?</p>
-            <p className="text-slate-500 text-sm mt-1">Предоставим реальные проекты под соглашением о конфиденциальности (NDA)</p>
+        <div className="mt-8 border border-emerald-200 bg-emerald-50 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <Icon name="ShieldCheck" size={22} className="text-emerald-600 shrink-0 mt-0.5" fallback="CheckCircle" />
+            <div>
+              <p className="font-semibold text-slate-900">50+ положительных заключений ГГЭ и НГЭ</p>
+              <p className="text-slate-600 text-sm mt-0.5">Гарантируем доведение проекта до положительного заключения экспертизы</p>
+            </div>
           </div>
           <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shrink-0" onClick={() => scrollTo('contacts')}>
-            Запросить образцы
+            Обсудить экспертизу
           </Button>
         </div>
       </div>
@@ -536,16 +543,21 @@ function Calculator() {
   }
 
   const base = OBJECT_TYPES.find(o => o.id === objType)?.base ?? 480000
-  const areaCoeff = 0.7 + (area / 10000) * 0.9
+  const areaCoeff = 0.4 + (area / 10000) * 0.9
   const voltCoeff = voltages.reduce((acc, v) => {
     const opt = VOLTAGE_OPTIONS.find(o => o.v === v)
     return Math.max(acc, opt?.mult ?? 1)
   }, 1) + (voltages.length > 1 ? 0.15 : 0)
   const lineCoeff = lineType !== 'none' ? lineLength * (lineType === 'KL' ? 35000 : 20000) : 0
-  const marksCoeff = 1 + (selectedMarks.length - 1) * 0.18
+  const marksWeightSum = selectedMarks.reduce((sum, id) => {
+    const m = PROJECT_MARKS.find(p => p.id === id)
+    return sum + (m?.weight ?? 0.20)
+  }, 0)
   const extras = (hasLighting ? 80000 : 0) + (hasArchlight ? 120000 : 0) + (hasLightning ? 60000 : 0)
-  const total = Math.round((base * areaCoeff * voltCoeff * marksCoeff + extras + lineCoeff) / 10000) * 10000
-  const days = Math.round(20 + (area / 5000) * 10 + (hasArchlight ? 10 : 0) + (voltages.length > 1 ? 10 : 0) + (selectedMarks.length - 1) * 5 + lineLength * 0.5)
+  const projectCost = base * areaCoeff * voltCoeff * marksWeightSum
+  const minProject = 80000
+  const total = Math.round((Math.max(projectCost, minProject) + extras + lineCoeff) / 10000) * 10000
+  const days = Math.round(15 + (area / 5000) * 8 + (hasArchlight ? 8 : 0) + (voltages.length > 1 ? 7 : 0) + (selectedMarks.length - 1) * 4 + lineLength * 0.5)
 
   return (
     <section id="calculator" className="bg-white py-20 border-b border-slate-200">
@@ -824,6 +836,7 @@ function About() {
                 'ГОСТ Р 21.101-2026 — актуальный стандарт на проектную документацию',
                 'Официальный партнёр IEK, EKF, Systeme Electric, Chint, КЭАЗ',
                 'Опыт более 15 лет, 200+ реализованных объектов',
+                '50+ положительных заключений ГГЭ и НГЭ',
                 'Бесплатная экспертиза вашей проектной документации',
               ].map(f => (
                 <div key={f} className="flex items-start gap-3">
@@ -840,6 +853,7 @@ function About() {
               { q: 'Делаете ли проекты для квартир и жилых домов?', a: 'Нет, мы специализируемся на коммерческих и производственных объектах: производственные корпуса, промышленные предприятия, склады, подстанции, пищевое производство и т.д.' },
               { q: 'По какому стандарту оформляете документацию?', a: 'Вся документация выпускается по актуальному ГОСТ Р 21.101-2026 на проектную и рабочую документацию.' },
               { q: 'Что такое бесплатная экспертиза проекта?', a: 'Мы бесплатно проверим вашу проектную документацию на соответствие нормативным требованиям, выявим ошибки в схемах и расчётах. По итогу дадим заключение — без обязательств заказывать у нас.' },
+              { q: 'Сопровождаете ли проект в ГГЭ и НГЭ?', a: 'Да. Полное сопровождение проекта в государственной (Главгосэкспертиза) и негосударственной экспертизе. Подготовка ответов на замечания, корректировка ПД до получения положительного заключения. У нас более 50 успешных заключений.' },
             ].map(({ q, a }) => (
               <details key={q} className="bg-slate-50 border border-slate-200 group">
                 <summary className="flex items-center justify-between px-5 py-4 cursor-pointer list-none select-none">
@@ -917,7 +931,8 @@ function Contacts() {
             <div className="space-y-5">
               {[
                 { icon: 'Phone', label: 'Телефон', val: '+7 978 220-3-380' },
-                { icon: 'Mail', label: 'Email', val: 'info@etmpro.ru' },
+                { icon: 'Mail', label: 'Email', val: 'info@eoes.ru' },
+                { icon: 'Globe', label: 'Сайт', val: 'eoes.ru' },
                 { icon: 'MapPin', label: 'Адрес', val: 'Москва, ул. Промышленная, 12, офис 301' },
                 { icon: 'Clock', label: 'График', val: 'Пн–Пт, 9:00–18:00 (МСК)' },
               ].map(({ icon, label, val }) => (
@@ -1013,7 +1028,7 @@ function Contacts() {
                     )}
                   </div>
                   {status === 'error' && (
-                    <p className="text-red-400 text-xs text-center">Ошибка отправки. Попробуйте ещё раз или напишите на info@etmpro.ru</p>
+                    <p className="text-red-400 text-xs text-center">Ошибка отправки. Попробуйте ещё раз или напишите на info@eoes.ru</p>
                   )}
                   <Button
                     onClick={handleSubmit}
@@ -1041,14 +1056,14 @@ function Footer() {
           <div className="w-6 h-6 bg-emerald-600 flex items-center justify-center">
             <Icon name="Zap" size={12} className="text-white" />
           </div>
-          <span className="text-slate-400 text-sm">ЭТМПРО © 2025</span>
+          <span className="text-slate-400 text-sm">ЭОЭС · eoes.ru © 2026</span>
         </div>
         <div className="flex items-center gap-4 flex-wrap justify-center">
           {NAV_LINKS.map(l => (
             <a key={l.href} href={l.href} className="text-slate-500 hover:text-slate-300 text-xs transition-colors">{l.label}</a>
           ))}
         </div>
-        <p className="text-slate-600 text-xs">info@etmpro.ru</p>
+        <p className="text-slate-600 text-xs">info@eoes.ru</p>
       </div>
     </footer>
   )
@@ -1061,8 +1076,8 @@ export default function LandingPage() {
       <Hero />
       <Services />
       <Projects />
-      <Samples />
       <Calculator />
+      <Expertise />
       <About />
       <Normative />
       <Contacts />
