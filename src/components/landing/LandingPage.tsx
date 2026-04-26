@@ -265,6 +265,26 @@ function Navbar() {
   )
 }
 
+function MobileBottomBar() {
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-white border-t border-slate-200 shadow-[0_-2px_12px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center gap-3">
+      <a
+        href="tel:+79782203380"
+        className="flex items-center gap-2 flex-1 min-w-0 bg-slate-100 hover:bg-slate-200 transition-colors px-3 py-2.5 rounded-sm"
+      >
+        <Icon name="Phone" size={15} className="text-emerald-600 shrink-0" />
+        <span className="text-sm font-semibold text-slate-800 truncate">+7 978 220-3-380</span>
+      </a>
+      <Button
+        className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-5 py-2.5 text-sm shrink-0"
+        onClick={() => scrollTo('contacts')}
+      >
+        Заявка
+      </Button>
+    </div>
+  )
+}
+
 function CircuitPattern({ id = 'circuit', color = '#10b981', opacity = 0.07 }: { id?: string, color?: string, opacity?: number }) {
   return (
     <svg
@@ -1133,7 +1153,7 @@ function Footer() {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pb-[68px] md:pb-0">
       <Navbar />
       <Hero />
       <Services />
@@ -1143,6 +1163,7 @@ export default function LandingPage() {
       <Normative />
       <Contacts />
       <Footer />
+      <MobileBottomBar />
     </div>
   )
 }
