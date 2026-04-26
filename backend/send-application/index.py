@@ -1,16 +1,20 @@
 """
-Бэкенд-функция для отправки заявки с сайта на email через Resend API. v5
+Бэкенд-функция для отправки заявки с сайта на email через Resend API. v6
+Файлы загружаются в S3, в письме — ссылки для скачивания.
 """
 
 import json
 import os
 import urllib.request
 import urllib.error
+import base64
+import uuid
+import boto3
 
 
 def handler(event: dict, context) -> dict:
     """
-    Принимает POST с данными формы и отправляет письмо через Resend.
+    Принимает POST с данными формы, загружает файлы в S3, отправляет письмо через Resend.
     """
 
     cors_headers = {
@@ -26,7 +30,6 @@ def handler(event: dict, context) -> dict:
     try:
         body_raw = event.get("body") or "{}"
         if event.get("isBase64Encoded"):
-            import base64
             body_raw = base64.b64decode(body_raw).decode("utf-8")
         body = json.loads(body_raw)
     except Exception as e:
@@ -38,23 +41,64 @@ def handler(event: dict, context) -> dict:
     description = body.get("description", "—")
     files = body.get("files", [])
 
+    # Загрузка файлов в S3
+    file_links = []
     if files:
+        s3 = boto3.client(
+            "s3",
+            endpoint_url="https://bucket.poehali.dev",
+            aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+            aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+        )
+        project_id = os.environ["AWS_ACCESS_KEY_ID"]
+        folder = f"applications/{uuid.uuid4().hex}"
+
+        for f in files:
+            file_name = f.get("name", "file")
+            file_content_b64 = f.get("content", "")
+            file_size = f.get("size", 0)
+            if not file_content_b64:
+                continue
+            try:
+                file_data = base64.b64decode(file_content_b64)
+                key = f"{folder}/{file_name}"
+                s3.put_object(
+                    Bucket="files",
+                    Key=key,
+                    Body=file_data,
+                    ContentDisposition=f'attachment; filename="{file_name}"',
+                )
+                cdn_url = f"https://cdn.poehali.dev/projects/{project_id}/bucket/{key}"
+                file_links.append({"name": file_name, "url": cdn_url, "size": file_size})
+            except Exception as e:
+                print(f"[WARN] Failed to upload {file_name}: {e}")
+                file_links.append({"name": file_name, "url": None, "size": file_size})
+
+    # Формирование секции файлов в письме
+    if file_links:
         files_rows = "".join(
-            f"<tr><td style='padding:4px 8px;border:1px solid #ddd;'>{i+1}</td>"
-            f"<td style='padding:4px 8px;border:1px solid #ddd;'>{f.get('name','—')}</td>"
-            f"<td style='padding:4px 8px;border:1px solid #ddd;'>{_format_size(f.get('size',0))}</td></tr>"
-            for i, f in enumerate(files)
+            f"<tr>"
+            f"<td style='padding:6px 10px;border:1px solid #ddd;'>{i+1}</td>"
+            f"<td style='padding:6px 10px;border:1px solid #ddd;'>"
+            + (f"<a href='{fl['url']}' style='color:#1a73e8;'>{_esc(fl['name'])}</a>" if fl['url'] else _esc(fl['name']))
+            + f"</td>"
+            f"<td style='padding:6px 10px;border:1px solid #ddd;'>{_format_size(fl['size'])}</td>"
+            f"</tr>"
+            for i, fl in enumerate(file_links)
         )
         files_section = f"""
-        <h3 style="color:#555;margin-top:24px;">Прикреплённые файлы ({len(files)} шт.)</h3>
+        <h3 style="color:#555;margin-top:24px;">Прикреплённые файлы ({len(file_links)} шт.)</h3>
         <table style="border-collapse:collapse;width:100%;font-size:14px;">
             <thead><tr style="background:#f0f0f0;">
-                <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">#</th>
-                <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">Имя файла</th>
-                <th style="padding:4px 8px;border:1px solid #ddd;text-align:left;">Размер</th>
+                <th style="padding:6px 10px;border:1px solid #ddd;text-align:left;">#</th>
+                <th style="padding:6px 10px;border:1px solid #ddd;text-align:left;">Файл</th>
+                <th style="padding:6px 10px;border:1px solid #ddd;text-align:left;">Размер</th>
             </tr></thead>
             <tbody>{files_rows}</tbody>
-        </table>"""
+        </table>
+        <p style="font-size:12px;color:#888;margin-top:8px;">Ссылки действительны для скачивания.</p>"""
+    elif files:
+        files_section = "<p style='color:#888;'>Файлы были приложены, но не удалось загрузить.</p>"
     else:
         files_section = "<p style='color:#888;'>Файлы не прикреплены.</p>"
 
@@ -87,7 +131,6 @@ def handler(event: dict, context) -> dict:
 </html>"""
 
     api_key = os.environ.get("RESEND_API_KEY", "")
-    print(f"[DEBUG] RESEND_API_KEY length: {len(api_key)}, starts with: {api_key[:8] if api_key else 'EMPTY'}")
     payload = json.dumps({
         "from": "noreply@eoes.ru",
         "to": ["info@eoes.ru"],
@@ -108,7 +151,7 @@ def handler(event: dict, context) -> dict:
     )
 
     try:
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=15) as resp:
             resp.read()
     except urllib.error.HTTPError as e:
         error_body = e.read().decode("utf-8", errors="replace")
